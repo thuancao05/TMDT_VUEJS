@@ -14,18 +14,21 @@
 
         <div class="row">
             <div class="col-12">
-                <a-table :dataSource="products" :columns="columns" :scroll="{ x: 576 }" :pagination="false"  @scroll="handleTableScroll"
-                ref="myTable">
+                <a-table :dataSource="products" :columns="columns" :scroll="{ x: 576 }"
+                >
 
-                    <template #bodyCell="{ column, record }">
+                    <template #bodyCell="{ column, record, index }">
 
                         <template v-if="column.key === 'index'">
-                            <span> <img src="{{ record.sp_id}}" alt=""> </span>
+                            <span> {{ index+1}}</span>
                         </template>
 
-                        <template v-if="column.key === 'thumbnail'">
-                            <span>{{ record.sp_id}}</span>
-                        </template>
+                        <div v-if="column.key === 'product_thumbnail'" class="image-cell">
+                            <img :src="record.sp_hinhAnh" alt="Image" class="max-width-100" />
+                          </div>
+                          <div v-else>
+                            {{ record[column.key] }}
+                          </div>
 
                         <template v-if="column.key === 'product_name'">
                             <span>{{ record.sp_ten}}</span>
@@ -67,9 +70,7 @@ import {message} from 'ant-design-vue';
 import { Table } from 'ant-design-vue';
 
     export default defineComponent({
-        components: {
-            ATable: Table, // Register the a-table component
-        },
+
         setup(){
             useMenu().onSelectedKeys(["admin-users"]);
 
@@ -108,35 +109,7 @@ import { Table } from 'ant-design-vue';
                 },
             ]
 
-            const tableData = ref([]); // Your table data
-    const currentPageIndex = ref(1); // Initial page index
-    const pageSize = 10; // Number of items per page
-
-
-    // Calculate the total number of pages
-    const totalPageCount = ref(Math.ceil(tableData.length / pageSize));
-
-    // Function to get the current page's data
-    const getCurrentPageData = () => {
-      const startIndex = (currentPageIndex.value - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      return tableData.value.slice(startIndex, endIndex);
-    };
-
-    // Pagination configuration
-    const paginationConfig = ref({
-      current: currentPageIndex.value,
-      pageSize: pageSize,
-      total: tableData.value.length,
-      showSizeChanger: false, // Hide option to change page size
-      showQuickJumper: true, // Show quick jumper for page navigation
-      showTotal: (total) => `Total ${total} items`,
-      onChange: (page) => {
-        currentPageIndex.value = page;
-      },
-    });
-
-    
+            
     const getProducts = () =>{
                 
                 axios.get('http://localhost/TMDT/admin/apiSanPham.php')
@@ -170,11 +143,6 @@ import { Table } from 'ant-design-vue';
             products,
             columns,
             destroy,
-            
-            tableData,
-                columns,
-                getCurrentPageData,
-                paginationConfig,
                 
             }
         },
@@ -182,3 +150,14 @@ import { Table } from 'ant-design-vue';
     });
 
 </script>
+
+<style scoped>
+.image-cell {
+  display: flex;
+  align-items: center;
+}
+.max-width-100 {
+  max-width: 100px;
+  height: auto; /* Maintain aspect ratio */
+}
+</style>
