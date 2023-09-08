@@ -14,6 +14,11 @@ const view = [
           name: "view-products-detail",
           component: () => import("../pages/view/detail.vue"),
         },
+        {
+          path: "products/:id/category",
+          name: "view-category-products",
+          component: () => import("../pages/view/category_products.vue"),
+        },
       ],
   
     },

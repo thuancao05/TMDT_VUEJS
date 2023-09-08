@@ -1,7 +1,19 @@
 <template>
   <a-menu mode="vertical">
-    <a-menu-item v-for="menuItem in category" :key="menuItem.id">
-      <a :href="menuItem.link">{{ menuItem.label }}</a>
+    <a-menu-item
+      v-for="menuItem in category"
+      :key="menuItem.id"
+      class="text-dark"
+    >
+      <router-link
+        :to="{
+          name: 'view-category-products',
+          params: { id: menuItem.value},
+        }"
+      >
+        <p>{{ menuItem.label }}</p>
+      </router-link>
+      
     </a-menu-item>
   </a-menu>
 </template>
@@ -23,7 +35,7 @@ export default defineComponent({
           // console.log(response);
           // console.log(response.data[0]);
           category.value = response.data;
-          // console.log(category.value[0].dm_ten);
+          // console.log(category);
         })
         .catch((error) => {
           console.log(error);
