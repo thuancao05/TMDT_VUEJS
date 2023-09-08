@@ -30,7 +30,7 @@ export default defineComponent({
         });
     };
     getCategory();
-    console.log(category);
+    // console.log(category);
     return {
       category,
     };

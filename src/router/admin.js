@@ -25,28 +25,8 @@ const admin = [
         name: "admin-orders",
         component: () => import("../pages/admin/orders/index.vue"),
       },
-    //   {
-    //     path: "orders/create",
-    //     name: "admin-orders-create",
-    //     component: () => import("../pages/admin/orders/create.vue"),
-    //   },
-    //   {
-    //     path: "products/:id/edit",
-    //     name: "admin-products-edit",
-    //     component: () => import("../pages/admin/products/edit.vue"),
-    //   },
 
     ],
-    // path: "/index",
-    // component: () => import("../layouts/index.vue"),
-    // children: [
-    //   // Quan ly user
-    //   {
-    //     path: "products",
-    //     name: "customer-products",
-    //     component: () => import("../pages/view/index.vue"),
-    //   },
-    // ],
 
   },
 ];

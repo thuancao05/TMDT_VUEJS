@@ -27,6 +27,8 @@ import {
 
 import './static/fontawesome-free-6.4.2-web/css/all.min.css';
 import 'ant-design-vue/dist/reset.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // You can choose minified version if you prefer.
 import 'bootstrap/dist/css/bootstrap-grid.min.css'
 import 'bootstrap/dist/css/bootstrap-utilities.min.css'
 const app = createApp(App);

@@ -1,9 +1,16 @@
 <template>
     <header>
+      <router-link
+      :to="{
+        name: 'customer-products'
+      }"
+      class="text-white"
+      >
         <div class="logo">
             <img src="../assets/logo.png" alt="Logo" style="max-width:60px">
             Sáng Tạo Điện Tử
         </div>
+      </router-link>
         <nav>
           <ul>
             <li><a href="#">
