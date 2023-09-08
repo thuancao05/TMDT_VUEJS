@@ -10,6 +10,7 @@
           name: 'view-category-products',
           params: { id: menuItem.value},
         }"
+        class="text-black"
       >
         <p>{{ menuItem.label }}</p>
       </router-link>
@@ -49,3 +50,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+.text-black{
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Use the default text color */
+  cursor: pointer; /* Show pointer cursor on hover */
+}</style>
