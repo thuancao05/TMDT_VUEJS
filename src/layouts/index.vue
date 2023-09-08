@@ -5,8 +5,8 @@
                 <div class="col-sm-2 d-none d-sm-flex">
                     <a-list bordered style="with:100%">
                         <TheMenu/>
-                        <template #header>
-                        <div>BẢNG ĐIỀU KHIỂN</div>
+                        <template #header >
+                        <div>DANH MỤC SẢN PHẨM</div>
                         </template>
                     </a-list>
                 </div>
@@ -18,8 +18,8 @@
 
 </template>
 <script>
-    import TheHeader from "../components/TheHeaderAdmin.vue";
-    import TheMenu from "../components/TheMenuAdmin.vue";
+    import TheHeader from "../components/TheHeaderIndex.vue";
+    import TheMenu from "../components/TheMenuIndex.vue";
     export default{
         components:{
             TheHeader,
@@ -27,3 +27,7 @@
         }
     }
 </script>
+
+<style>
+
+</style>

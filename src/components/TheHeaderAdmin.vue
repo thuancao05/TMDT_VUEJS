@@ -7,7 +7,7 @@
                 </span>
             </div>
             <div class="col-10 col-sm-9 d-flex align-items-center justify-content-center justify-content-sm-start" >
-                <img src="../assets/logo.jpg" alt="Logo" height="32" width="34" class="mx-3 me-3">
+                <img src="../assets/logo.png" alt="Logo" height="60" width="60" class="mx-3 me-3">
                 <span class="d-none d-sm-flex">QUẢN TRỊ</span>
             </div>
             

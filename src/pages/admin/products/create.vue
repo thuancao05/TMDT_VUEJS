@@ -1,21 +1,24 @@
 <template>
-  
   <form @submit.prevent="createProducts">
-    <a-card title="Tạo mới tài khoản" style="width: 100%">
+    <a-card title="Tạo mới sản phẩm" style="width: 100%">
       <div class="row">
         <div class="col-12 col-sm-4">
           <div class="row">
             <div class="col-12 d-flex justify-content-center mb-3">
-
               <div>
-                <h1>Image Upload</h1>
+                <h2>Tải lên hình ảnh</h2>
                 <input type="file" @change="handleFileUpload" ref="fileInput" />
-                <button @click="uploadImage" class="mb-2">Upload</button>
-            
+                <br />
+                <button @click="uploadImage" class="mt-2">Upload</button>
+                <br />
                 <!-- Display the uploaded image -->
-                <img v-if="imageUrl" :src="imageUrl" alt="Uploaded Image" style="max-width:200px"/>
+                <img
+                  v-if="imageUrl"
+                  :src="imageUrl"
+                  alt="Uploaded Image"
+                  style="max-width: 200px"
+                />
               </div>
-
             </div>
           </div>
         </div>
@@ -71,7 +74,7 @@
                 placeholder="Mô tả"
                 allow-clear
                 v-model:value="describe"
-                :row="10"
+                :rows="14"
                 :class="{
                   'input-danger': errors.describe,
                 }"
@@ -229,15 +232,12 @@ import axios from "axios";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
-import ChildComponent from "./uploadimg.vue";
 
 export default defineComponent({
-  components: {
-    'child-component': ChildComponent, // Register the child component
-    },
+
 
   setup() {
-    useMenu().onSelectedKeys(["admin-users"]);
+    useMenu().onSelectedKeys(["admin-products"]);
 
     const dateFormat = "YYYY/MM/DD";
     const router = useRouter();
@@ -273,35 +273,42 @@ export default defineComponent({
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     };
 
+
+    const handleFileUpload = (event) => {
+      selectedFile.value = event.target.files[0];
+    };
+
+    const uploadImage = (event) => {
+      event.preventDefault();
+      const formData = new FormData();
+      formData.append("image", selectedFile.value);
+
+      axios
+        .post("http://localhost/TMDT/admin/upload1.php", formData)
+        .then((response) => {
+          // console.log(response.data);
+          imageUrl.value = response.data.data.url; // Set the uploaded image URL
+          products.thumbUrl = response.data.data.url;
+          alert("Thêm hình ảnh thành công!");
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("Thêm hình ảnh thất bại.");
+        });
+    };
     const createProducts = () => {
       axios
         .post("http://localhost/TMDT/admin/apiTaoSanPham.php/", products)
         .then(function (response) {
           console.log(response.data);
-        });
-    };
-    const handleFileUpload = (event) => {
-      selectedFile.value = event.target.files[0];
-    };
-
-    const uploadImage = () => {
-      const formData = new FormData();
-      formData.append('image', selectedFile.value);
-
-      axios
-        .post('http://localhost/TMDT/admin/upload1.php', formData)
-        .then((response) => {
-          console.log(response.data);
-          imageUrl.value = response.data.data.url; // Set the uploaded image URL
-          products.thumbUrl= response.data.data.url;
-          alert('Image uploaded successfully!');
+          message.success("Thêm sản phẩm thành công !");
+           router.push({name: "admin-products"})
         })
         .catch((error) => {
           console.error(error);
-          alert('Error uploading image.');
-        });
+          alert("Thêm sản phẩm thất bại.");
+        });;
     };
-    
     getProductsCreate();
 
     return {
@@ -311,10 +318,12 @@ export default defineComponent({
       createProducts,
       errors,
       dateFormat,
-      selectedFile, imageUrl, handleFileUpload, uploadImage
+      selectedFile,
+      imageUrl,
+      handleFileUpload,
+      uploadImage,
     };
   },
-  
 });
 </script>
 
