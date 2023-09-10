@@ -346,7 +346,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .select-danger {
   border: 1px solid red;
 }

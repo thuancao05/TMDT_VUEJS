@@ -175,7 +175,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 
 /* Add custom styling for product cards here */
 .product-card {

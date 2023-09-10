@@ -141,7 +141,7 @@
   });
   </script>
   
-  <style>
+  <style scoped>
   .slider {
     display: flex;
     flex-wrap: nowrap;

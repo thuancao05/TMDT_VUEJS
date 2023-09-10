@@ -69,12 +69,10 @@
 import { defineComponent, ref } from "vue";
 import { useMenu } from "../../../stores/use-menu.js";
 import { message } from "ant-design-vue";
-import { useRouter } from "vue-router";
 
 export default defineComponent({
   setup() {
     useMenu().onSelectedKeys(["admin-products"]);
-    const router = useRouter();
 
     const products = ref([]);
 
@@ -119,7 +117,7 @@ export default defineComponent({
         .get("http://localhost/TMDT/admin/apiSanPham.php")
         .then(function (response) {
           // handle success
-          console.log(response);
+          // console.log(response);
           products.value = response.data;
         })
         .catch(function (error) {
@@ -143,21 +141,6 @@ export default defineComponent({
           });
       }
     };
-
-    const checkAuth =  () => {
-      axios
-        .get(`http://localhost/TMDT/admin/check-auth.php`,)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          router.push({name: "login"})
-          console.log(error);
-        });
-
-    };
-    // console.log(checkAuth()); 
-    checkAuth();
     getProducts();
     return {
       products,

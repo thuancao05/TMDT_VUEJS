@@ -51,7 +51,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .text-black{
   text-decoration: none; /* Remove underline */
   color: inherit; /* Use the default text color */

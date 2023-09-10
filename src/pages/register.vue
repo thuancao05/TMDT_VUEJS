@@ -6,8 +6,18 @@
       style="height: 200px; width: 200px"
       class="justify-content-sm-center"
     />
-    <h2>Login</h2>
-    <form @submit.prevent="login" class="login-form justify-content-sm-center">
+    <h2>Register</h2>
+    <form @submit.prevent="register" class="login-form justify-content-sm-center">
+      <div class="form-group">
+        <label for="email">Your name:</label>
+        <a-input
+          placeholder="Tên người dùng"
+          allow-clear
+          v-model:value="name"
+          required
+        />
+      </div>
+
       <div class="form-group">
         <label for="email">Email:</label>
         <a-input
@@ -30,12 +40,11 @@
         />
       </div>
       <span v-if="authenticated" class="error-message">
-        Sai tên đăng nhập hoặc mật khẩu !</span
+        Email đã được đăng ký trước đó !</span
       >
-        <button type="submit" class="btn-login" >Login</button>
-    </form>
-    <button class="btn-register login-container" @click="register()">Register</button>
+        <button type="submit" class="btn-login" >Register</button>
 
+    </form>
   </div>
 </template>
   
@@ -51,41 +60,34 @@ export default defineComponent({
     const authenticated = ref(false);
     const router = useRouter();
     const user = reactive({
-      email: "thuan@gmail.com",
-      password: "thuan123",
+      email: "",
+      password: "",
+      name: ""
     });
     const validateEmail = (email) => {
       // Regular expression for basic email validation
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailPattern.test(email);
     };
-    const checkAuth = () => {
-      axios
-        .get(`http://localhost/TMDT/admin/check-auth.php`)
-        .then((response) => {
-          // console.log(response);
-          if (response.data.user == "admin") {
-            router.push({ name: "admin-products" });
-          } else {
-            router.push({ name: "customer-products" });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    const login = () => {
+
+    const register = () => {
       if (!validateEmail(user.email)) {
         isEmailValid.value = false;
       } else {
         axios
-          .post("http://localhost/TMDT/admin/apiLogin.php/", user)
+          .post("http://localhost/TMDT/admin/apiSigup.php/", user)
           .then((response) => {
-            console.log(response.data);
-            if (response.data == "Login_fail") {
+            // console.log(response.data);
+            if (response.data == "Email already exists") {
               authenticated.value = true;
-            } else {
-              checkAuth();
+            } else if(response.data == "Register Fail !") {
+              // console.log("Thất bại !");
+              message.error("Đăng ký thất bại !")
+
+            }else{
+              // console.log("Thành công");
+              message.success("Đăng ký thành công !")
+              router.push({name: "login"});
             }
           })
           .catch((error) => {
@@ -94,16 +96,7 @@ export default defineComponent({
       }
     };
 
-    onMounted(() => {
-      checkAuth();
-    });
-
-    const register = () =>{
-      router.push({ name: "register" });
-    }
-
     return {
-      login,
       isEmailValid,
       authenticated,
       ...toRefs(user),
@@ -167,7 +160,6 @@ input[type="password"] {
   background-color: #0056b3;
 }
 .btn-register{
-  margin: 20px;
   padding: 10px;
   background-color: #9ea2a7;
   color: #fff;
