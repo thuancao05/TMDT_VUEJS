@@ -48,10 +48,7 @@
           </div>
 
           <div class="col-12 col-sm-8">
-            <a-input-number
-                v-model:value="quantity_value"
-                :min="1"
-            />
+            <a-input-number v-model:value="quantity_value" :min="1" />
           </div>
         </div>
       </div>
@@ -65,14 +62,13 @@
           </a-button>
         </router-link>
 
-        <a-button type="primary" style="margin-left: 30px;">
+        <a-button type="primary" style="margin-left: 30px" @click="addToCart(id,quantity_value)">
           <span>Thêm vào giỏ hàng</span>
         </a-button>
       </div>
     </div>
   </a-card>
 
-  
   <!-- star list products -->
   <div class="mt-3">
     <h3>Sản phẩm liên quan</h3>
@@ -103,19 +99,22 @@
         </div>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
+import axios from "axios";
 import { defineComponent, ref, reactive, toRefs } from "vue";
 import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   setup() {
     const errors = ref({});
     const dateFormat = "YYYY/MM/DD";
     const quantity_value = ref(1);
-    
+    const router = useRouter();
+
     const product = reactive({
       name: "",
       describe: "",
@@ -129,7 +128,6 @@ export default defineComponent({
     const route = useRoute();
     const id = route.params.id;
     const getProduct = (product_id) => {
-      
       //   console.log(id);
       axios
         .post(`http://localhost/TMDT/admin/api1SanPham.php/`, product_id)
@@ -140,58 +138,77 @@ export default defineComponent({
           product.category_id = response.data[0].dm_id;
           product.quantity = response.data[0].sp_soLuong;
           product.thumbUrl = response.data[0].sp_hinhAnh;
-        //   console.log(response);
-        
+          //   console.log(response);
+
           axios
-          .post(`http://localhost/TMDT/admin/apiSanPhamDanhMuc.php/`, product.category_id)
-          .then((response) => {
+            .post(
+              `http://localhost/TMDT/admin/apiSanPhamDanhMuc.php/`,
+              product.category_id
+            )
+            .then((response) => {
               products.value = response.data;
-            // console.log(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+              // console.log(response.data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch((error) => {
           console.log(error);
         });
-
     };
     const formatPrice = (price) => {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }; 
+    };
+
+    const addToCart = (product_id, quantity) => {
+      axios
+        .post(`http://localhost/TMDT/admin/apiThemSPVaoGioHang.php/`, {
+          product_id,
+          quantity,
+        })
+        .then((response) => {
+          // console.log(response);
+          router.push({ name: "cart" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     getProduct(id);
 
     return {
+      id,
       errors,
       ...toRefs(product),
       dateFormat,
       quantity_value,
       products,
       getProduct,
-      formatPrice
+      formatPrice,
+      addToCart
     };
   },
 });
 </script>
 
 <style scoped>
-
 /* Add custom styling for product cards here */
 .product-card {
   width: 100%; /* Ensure the image spans the full width of the card */
-  height: 200px; /* Set the fixed height for the image */
+  height: 250px; /* Set the fixed height for the image */
   object-fit: cover; /* Maintain aspect ratio and cover the entire space */
 }
 .product-name {
   min-height: 70px;
 }
-.text-black{
+.text-black {
   text-decoration: none; /* Remove underline */
   color: inherit; /* Use the default text color */
   cursor: pointer; /* Show pointer cursor on hover */
 }
-.card:hover{
+.card:hover {
   transform: scale(1.05); /* Scale the element to 105% on hover */
-  transition: transform 0.3s ease; /* Add a smooth transition effect */}
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
 </style>

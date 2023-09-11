@@ -19,9 +19,9 @@
           </a>
         </li>
         <li>
-          <a href="#">
+          <router-link :to="{name: 'cart'}"> 
             <ShoppingCartOutlined />
-          </a>
+          </router-link>
         </li>
         <li>
           <a href="#">

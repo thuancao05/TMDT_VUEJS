@@ -10,7 +10,7 @@
                         </template>
                     </a-list>
                 </div>
-                <div class="col-sm-10 mt-3">
+                <div class="col-sm-10 mt-3" style="min-height: 700px">
                     <router-view></router-view>
                 </div>
         </div>

@@ -10,7 +10,7 @@
   <!-- end slier -->
 
   <!-- star list products -->
-  <div class="mt-3">
+  <div class="mt-3 col-sm-12">
     <h2>Sản phẩm</h2>
     <div class="row">
       <div v-for="product in products" :key="product.id" class="col-md-4 mb-4">
@@ -50,7 +50,6 @@ import {
   onBeforeUnmount,
   defineComponent,
 } from "vue";
-
 export default defineComponent({
   setup() {
     const images = ref([
@@ -175,7 +174,7 @@ button:last-child {
 /* Add custom styling for product cards here */
 .product-card {
   width: 100%; /* Ensure the image spans the full width of the card */
-  height: 300px; /* Set the fixed height for the image */
+  height: 350px; /* Set the fixed height for the image */
   object-fit: cover; /* Maintain aspect ratio and cover the entire space */
 }
 .product-name {
