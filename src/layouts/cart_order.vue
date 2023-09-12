@@ -1,7 +1,7 @@
 <template>
     <TheHeader/>
     <div class="container-fluid mt-3 productContainer">
-        <div class="row mr-5 col-sm-12" style="min-height: 700px;">
+        <div class="row mr-5 col-sm-12" style="min-height: 550px;">
            <router-view></router-view>
 
         </div>
@@ -20,7 +20,7 @@
     }
 </script>
 
-<style>
+<style scoped>
 
 .productContainer {
     width: 90%;

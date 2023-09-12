@@ -43,8 +43,9 @@
         Email đã được đăng ký trước đó !</span
       >
         <button type="submit" class="btn-login" >Register</button>
-
     </form>
+    <button class="btn-register login-container" @click="login()">Login</button>
+
   </div>
 </template>
   
@@ -96,11 +97,16 @@ export default defineComponent({
       }
     };
 
+    const login = () =>{
+      router.push({ name: "login" });
+    }
+
+
     return {
       isEmailValid,
       authenticated,
       ...toRefs(user),
-      register
+      login
     };
   },
 });
@@ -167,6 +173,7 @@ input[type="password"] {
   border-radius: 3px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin: 3px;
 }
 
 .btn-register:hover {

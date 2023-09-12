@@ -3,7 +3,7 @@
   <div>
     <h2 class="justify-content-sm-center">Giỏ Hàng</h2>
 
-    <a-table :dataSource="products" :columns="columns" :scroll="{ x: 576 }">
+    <a-table :dataSource="products" :columns="columns" :scroll="{ x: 576 }" :pagination="false">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'index'">
           <span> {{ index + 1 }}</span>
@@ -30,18 +30,27 @@
         <template v-if="column.key === 'sum'">
             <span>{{ formatPrice(record[3]*record[4]) }}</span>
           </template>
+
         <template v-if="column.key === 'delete'">
-          <a-button type="danger" @click="destroy(record.sp_id, record.sp_ten)">
+          <a-button type="danger" @click="destroy(index, record[1])">
             <i class="fa-solid fa-trash primary"></i>
           </a-button>
         </template>
       </template>
+      <template #footer>
+        Tổng cộng - 
+        Số lượng sản phẩm: <b style=" margin: auto 5px">{{formatPrice(totalItem) }} Cái </b>
+        || Thành tiền:
+        <b style="color: red; margin-left:5px"> {{formatPrice(totalSum) }} Đ</b>
+
+      </template>
+
     </a-table>
   </div>
 </template>
   
   <script>
-import { defineComponent, ref,reactive } from "vue";
+import { defineComponent, ref,computed  } from "vue";
 import { message } from "ant-design-vue";
 
 export default defineComponent({
@@ -85,7 +94,7 @@ export default defineComponent({
         width: 100,
       },
       {
-        title: "Xóa sản phẩm",
+        title: "Bỏ chọn",
         dataIndex: "delete",
         key: "delete",
         width: 150,
@@ -97,9 +106,9 @@ export default defineComponent({
         .get("http://localhost/TMDT/admin/apiThemSPVaoGioHang.php")
         .then(function (response) {
           // handle success
-            // console.log(response);
+            console.log(response);
             products.value = response.data;
-            console.log(products);
+            // console.log(products);
 
         })
         .catch(function (error) {
@@ -108,14 +117,14 @@ export default defineComponent({
         });
     };
 
-    const destroy = (id, username) => {
-      if (confirm("Bạn có chắc chắn muốn xóa sản phẩm: " + username)) {
+    const destroy = (id, name) => {
+      if (confirm("Bạn có chắc chắn muốn xóa sản phẩm: " + name)) {
         axios
-          .delete(`http://localhost/TMDT/admin/apiTaoSanPham.php?id=${id}`, id)
+          .delete(`http://localhost/TMDT/admin/apiThemSPVaoGioHang.php?id=${id}`, id)
           .then(function (response) {
             message.success("Xóa thành công !");
-            // console.log(response);
-            getProducts();
+            //  console.log(response);
+            getCart();
           })
           .catch(function (error) {
             // handle error
@@ -123,7 +132,17 @@ export default defineComponent({
           });
       }
     };
-
+    // Calculate the total sum using a computed property
+    const totalSum = computed(() => {
+      return products.value.reduce((sum, product) => {
+        return sum + product[3] * product[4]; // Assuming price is at index 3 and quantity at index 4
+      }, 0);
+    });
+    const totalItem = computed(() => {
+      return products.value.reduce((sum, product) => {
+        return sum + product[4]; // Assuming price is at index 3 and quantity at index 4
+      }, 0);
+    });
     const formatPrice = (price) => {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     };    
@@ -132,7 +151,9 @@ export default defineComponent({
       products,
       columns,
       destroy,
-      formatPrice
+      formatPrice,
+      totalSum,
+      totalItem
     };
   },
 });
