@@ -38,14 +38,33 @@
         </template>
       </template>
       <template #footer>
-        Tổng cộng - 
-        Số lượng sản phẩm: <b style=" margin: auto 5px">{{formatPrice(totalItem) }} Cái </b>
+        <h4>
+        Tổng cộng - Số lượng sản phẩm:
+        <b style="margin: auto 5px">{{ formatPrice(totalItem) }} Cái </b>
         || Thành tiền:
-        <b style="color: red; margin-left:5px"> {{formatPrice(totalSum) }} Đ</b>
-
+        <b style="color: red; margin-left: 5px">
+          {{ formatPrice(totalSum) }} Đ</b
+        >
+      </h4>
       </template>
-
     </a-table>
+  </div>
+
+  <div class="row">
+    <div class="col-12 m-3 d-sm-flex justify-content-sm-center">
+      <router-link :to="{ name: 'customer-products' }" class="mr-2">
+        <a-button>
+          <span>Trở lại trang chủ</span>
+        </a-button>
+      </router-link>
+
+      <router-link :to="{ name: 'payment' }" class="mr-2">
+      <a-button type="primary" style="margin-left: 30px">
+        <span>Đặt hàng </span>
+      </a-button>
+    </router-link>
+
+    </div>
   </div>
 </template>
   

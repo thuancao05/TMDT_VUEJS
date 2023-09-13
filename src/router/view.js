@@ -25,11 +25,16 @@ const view = [
     path: "/cart",
     component: () => import("../layouts/cart_order.vue"),
     children: [
-      // dasboard index
+      // cart
       {
         path: "",
         name: "cart",
         component: () => import("../pages/view/cart.vue"),
+      },
+      {
+        path: "payment",
+        name: "payment",
+        component: () => import("../pages/view/payment.vue"),
       },
     ],
   },
