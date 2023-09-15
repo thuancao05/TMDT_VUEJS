@@ -19,21 +19,24 @@
           </a>
         </li>
         <li>
-          <router-link :to="{name: 'cart'}"> 
+          <router-link :to="{ name: 'cart' }">
             <ShoppingCartOutlined />
           </router-link>
         </li>
         <li>
-          <a href="#">
+          <router-link :to="{ name: 'customer-profile' }">
             <UserOutlined />
-          </a>
+          </router-link>
         </li>
 
-      <li>
-        <a href="#" @click="logout()">
-          <LogoutOutlined />
-        </a>
-      </li>
+        <li>
+          <a href="#" @click="logout()">
+            <LogoutOutlined />
+          </a>
+        </li>
+        <li>
+          <span class="msg">{{ username }}</span>
+        </li>
       </ul>
     </nav>
   </header>
@@ -43,9 +46,9 @@ import {
   SearchOutlined,
   ShoppingCartOutlined,
   UserOutlined,
-  LogoutOutlined
+  LogoutOutlined,
 } from "@ant-design/icons-vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 
@@ -54,26 +57,30 @@ export default defineComponent({
     SearchOutlined,
     ShoppingCartOutlined,
     UserOutlined,
-    LogoutOutlined
+    LogoutOutlined,
   },
   name: "Header",
   setup() {
     const router = useRouter();
-    const checkAuth =  () => {
+    const username = ref('Xin chào ');
+
+    const checkAuth = () => {
       axios
-        .get(`http://localhost/TMDT/admin/check-auth.php`,)
+        .get(`http://localhost/TMDT/admin/check-auth.php`)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
+          username.value += response.data.username;
+
           // if(response.data.user != 'admin'){
           //   router.push({name: "login"})
           // }else{
           // }
         })
         .catch((error) => {
-          router.push({name: "login"})
+          // router.push({ name: "login" });
+          
           console.log(error);
         });
-
     };
 
     const logout = () => {
@@ -88,8 +95,11 @@ export default defineComponent({
           console.log(error);
         });
     };
+
+    checkAuth();
     return {
       logout,
+      username
     };
   },
 });
@@ -123,6 +133,8 @@ nav ul {
 nav li {
   margin-right: 30px;
   align-items: center;
+  display: inline-flex;
+
 }
 
 nav a {
@@ -132,5 +144,8 @@ nav a {
 }
 nav a :hover {
   color: red;
+}
+.msg{
+  display: inline-flex;
 }
 </style>

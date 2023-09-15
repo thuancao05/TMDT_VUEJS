@@ -124,6 +124,7 @@
             <a-input placeholder="Ghi chú" allow-clear v-model:value="note"/>
             <br />
           </div>
+
         </div>
         <div class="row">
           <div class="col-12 m-3 d-sm-flex justify-content-sm-center">
@@ -159,7 +160,7 @@ export default defineComponent({
       phone: "",
       fullname: "",
     }); 
-    const note = "";
+    const note = ref("");
     const address = ref("");
     const columns = [
       {
@@ -266,14 +267,17 @@ export default defineComponent({
         .post("http://localhost/TMDT/admin/apiTaoDonHang.php/", {
           tongtien: totalSum.value,
           tongSL: totalItem.value,
+          ghichu: note.value,
         })
         .then(function (response) {
           console.log(response.data);
+          message.success("Đặt hàng thành công")
+          router.push({name: "cart"})
 
         })
         .catch((error) => {
           console.error(error);
-          // alert("Thêm sản phẩm thất bại.");
+          alert("Đặt hàng thất bại.");
         });
     };
 
@@ -304,7 +308,7 @@ export default defineComponent({
       ...toRefs(user),
       filterOption,
       address,
-      note
+      note,
     };
   },
 });

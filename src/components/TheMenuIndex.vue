@@ -10,6 +10,7 @@
           name: 'view-category-products',
           params: { id: menuItem.value},
         }"
+        :key="menuItem.value"
         class="text-black"
       >
         <p>{{ menuItem.label }}</p>
@@ -21,13 +22,14 @@
 <script>
 import { defineComponent, ref, reactive, toRefs } from "vue";
 import axios from "axios";
-import { message } from "ant-design-vue";
-import { useRouter } from "vue-router";
-import dayjs from "dayjs";
+import { useMenu } from "../stores/use-menu.js";
+import { storeToRefs } from "pinia";
+
 
 export default defineComponent({
   setup() {
     const category = ref([]);
+    const store = useMenu();
 
     const getCategory = () => {
       axios
@@ -46,6 +48,8 @@ export default defineComponent({
     // console.log(category);
     return {
       category,
+      ...storeToRefs(store),
+
     };
   },
 });
