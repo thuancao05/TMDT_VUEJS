@@ -14,11 +14,6 @@
     <nav>
       <ul>
         <li>
-          <a href="#">
-            <SearchOutlined />
-          </a>
-        </li>
-        <li>
           <router-link :to="{ name: 'cart' }">
             <ShoppingCartOutlined />
           </router-link>
@@ -35,11 +30,19 @@
           </a>
         </li>
         <li>
-          <span class="msg">{{ username }}</span>
+          <b class="msg">{{ username }}</b>
         </li>
       </ul>
     </nav>
   </header>
+  <div class="search-style">
+    <a-input-search
+      v-model:value="searchValue"
+      placeholder="Bạn cần tìm sản phẩm nào..."
+      style="width: 300px"
+      @search="onSearch()"
+    />
+  </div>
 </template>
   <script>
 import {
@@ -48,10 +51,10 @@ import {
   UserOutlined,
   LogoutOutlined,
 } from "@ant-design/icons-vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
-
+const searchKey = ref(0);
 export default defineComponent({
   components: {
     SearchOutlined,
@@ -62,8 +65,8 @@ export default defineComponent({
   name: "Header",
   setup() {
     const router = useRouter();
-    const username = ref('Xin chào ');
-
+    const username = ref("Xin chào ");
+    const searchValue = ref("");
     const checkAuth = () => {
       axios
         .get(`http://localhost/TMDT/admin/check-auth.php`)
@@ -78,11 +81,10 @@ export default defineComponent({
         })
         .catch((error) => {
           // router.push({ name: "login" });
-          
+
           console.log(error);
         });
     };
-
     const logout = () => {
       axios
         .get(`http://localhost/TMDT/admin/apiLogout.php`)
@@ -96,10 +98,24 @@ export default defineComponent({
         });
     };
 
+    const onSearch = () => {
+      searchKey.value += 1;
+      // console.log(searchValue.value);
+      // Update the route with the new search key as a query parameter
+      router.push({
+        name: "search-products",
+        params: { id: searchValue.value },
+        query: { key: searchKey.value },
+        state: { reload: true }, // Add a state property to trigger re-render
+      });
+    };
+
     checkAuth();
     return {
       logout,
-      username
+      username,
+      onSearch,
+      searchValue,
     };
   },
 });
@@ -113,7 +129,7 @@ header {
   align-items: center;
   padding: 10px 20px;
   color: white;
-  background-color: #007bff;
+  background-color: #f37435;
   border-radius: 10px;
   margin: 5px;
 }
@@ -134,7 +150,6 @@ nav li {
   margin-right: 30px;
   align-items: center;
   display: inline-flex;
-
 }
 
 nav a {
@@ -143,9 +158,17 @@ nav a {
   font-size: 30px; /* Adjust the font size as needed */
 }
 nav a :hover {
-  color: red;
+  color: blue;
 }
-.msg{
+.msg {
   display: inline-flex;
+}
+
+.search-style {
+  text-align: center;
+  background-color: deepskyblue;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 5px;
 }
 </style>

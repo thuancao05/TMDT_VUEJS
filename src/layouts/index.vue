@@ -3,7 +3,7 @@
     <div class="container-fluid mt-3 productContainer">
         <div class="row mr-5">
                 <div class="col-sm-2 mt-3 d-none d-sm-flex">
-                    <a-list bordered style="with:100%; background-color: #007bff; height:200px" class="text-white">
+                    <a-list bordered style="with:100%; background-color: #fec300; height:200px" class="text-white">
                         <TheMenu/>
                         <template #header >
                         <b>Danh mục sản phẩm</b>
