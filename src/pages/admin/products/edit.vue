@@ -6,20 +6,20 @@
           <div class="row">
             <div class="col-12 d-flex justify-content-center mb-3">
               <div id="image"></div>
-                <div>
-                    <h2>Tải lên hình ảnh</h2>
-                    <input type="file" @change="handleFileUpload" ref="fileInput" />
-                    <br />
-                    <button @click="uploadImage" class="mt-2">Upload</button>
-                    <br />
-                    <!-- Display the uploaded image -->
-                    <img
-                    v-if="imageUrl"
-                    :src="imageUrl"
-                    alt="Uploaded Image"
-                    style="max-width: 200px"
-                    />
-                </div>
+              <div>
+                <h2>Tải lên hình ảnh</h2>
+                <input type="file" @change="handleFileUpload" ref="fileInput" />
+                <br />
+                <button @click="uploadImage" class="mt-2">Upload</button>
+                <br />
+                <!-- Display the uploaded image -->
+                <img
+                  v-if="imageUrl"
+                  :src="imageUrl"
+                  alt="Uploaded Image"
+                  style="max-width: 200px"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -51,9 +51,7 @@
 
               <br />
               <div class="w-100">
-                <small class="text-danger" v-if="errors.name">{{
-                  errors.name[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.name">Bắt buộc điền tên sản phẩm có độ dài tối đa 255 ký tự</small>
               </div>
             </div>
           </div>
@@ -61,7 +59,6 @@
           <div class="row mb-3">
             <div class="col-12 col-sm-2 text-start text-sm-end">
               <label>
-                <span class="text-danger me-1">*</span>
                 <span
                   :class="{
                     'text-danger': errors.describe,
@@ -77,7 +74,6 @@
                 allow-clear
                 v-model:value="describe"
                 :rows="13"
-
               />
               <br />
               <div class="w-100">
@@ -111,9 +107,7 @@
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.price">{{
-                  errors.price[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.price">Bắt buộc nhập giá</small>
               </div>
             </div>
           </div>
@@ -124,7 +118,7 @@
                 <span class="text-danger me-1">*</span>
                 <span
                   :class="{
-                    'text-danger': errors.category_id,
+                    'text-danger': errors.category,
                   }"
                   >Danh mục:</span
                 >
@@ -141,13 +135,11 @@
                 allow-clear
                 v-model:value="category_id"
                 :class="{
-                  'input-danger': errors.category_id,
+                  'input-danger': errors.category,
                 }"
               ></a-select>
               <div class="w-100">
-                <small class="text-danger" v-if="errors.category_id">{{
-                  errors.category_id[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.category">Bắt buộc chọn danh mục</small>
               </div>
             </div>
           </div>
@@ -176,9 +168,7 @@
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.quantity">{{
-                  errors.quantity[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.quantity">Bắt buộc nhập số lượng</small>
               </div>
             </div>
           </div>
@@ -224,7 +214,6 @@
       </div>
     </a-card>
   </form>
-
 </template>
 <script>
 import { defineComponent, ref, reactive, toRefs } from "vue";
@@ -234,6 +223,12 @@ import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 import dayjs from "dayjs";
+import {
+  validateEmail,
+  validatePhoneNumber,
+  validateMaxLength,
+  validateNotEmpty,
+} from "../../../stores/validate.js";
 export default defineComponent({
   setup() {
     useMenu().onSelectedKeys(["admin-products"]);
@@ -245,31 +240,55 @@ export default defineComponent({
     const selectedFile = ref(null);
     const imageUrl = ref(null);
     const products = reactive({
+      id:"",
       name: "",
       describe: "",
       price: "",
-      date_of_manufacture: ref(),
+      date_of_manufacture: ref(dayjs(), dateFormat),
       category_id: [],
       quantity: "",
       thumbUrl: "",
     });
 
-    const errors = ref({});
+    const errors = reactive({
+      name: false,
+      category: false,
+      price: false,
+      describe: false,
+      quantity: false,
+    });
+
+    const checkValidate = (products) => {
+      // console.log(products);
+      errors.category = products.category_id.length === 0;
+      errors.name =
+        !validateNotEmpty(products.name) ||
+        !validateMaxLength(products.name, 255);
+      errors.price = !validateNotEmpty(products.price);
+      errors.quantity = !validateNotEmpty(products.quantity);
+
+      if (
+        errors.category == false &&
+        errors.name == false &&
+        errors.price == false &&
+        errors.quantity == false
+      ) {
+        return true;
+      }
+    };
 
     const getProductsEdit = () => {
       const id = route.params.id;
-      // console.log(id);
+      products.id = id;
       axios
         .get("http://localhost/TMDT/admin/apiDanhMuc.php")
         .then((response) => {
-          // console.log(response);
-          // console.log(response.data[0]);
           category.value = response.data;
-        //   console.log(category.value[0].dm_ten);
         })
         .catch((error) => {
           console.log(error);
         });
+
       axios
         .post(`http://localhost/TMDT/admin/apiSanPham.php/`, id)
         .then((response) => {
@@ -290,18 +309,21 @@ export default defineComponent({
     };
 
     const updateProducts = () => {
-      axios
-        .put(`http://127.0.0.1:8000/api/users/${route.params.id}`)
-        .then((response) => {
-          if (response.status == 200) {
-            message.success("Cập nhật thành công !");
-            // router.push({name:"admin-users"});
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          errors.value = error.response.data.errors;
-        });
+      if (checkValidate(products)) {
+        axios
+          .put(`http://localhost/TMDT/admin/apiSanPham.php/`, products)
+          .then((response) => {
+            if (response.status == 200) {
+              console.log(response)
+              message.success("Cập nhật thành công !");
+              getProductsEdit();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            errors.value = error.response.data.errors;
+          });
+      }
     };
 
     const filterOption = (input, option) => {

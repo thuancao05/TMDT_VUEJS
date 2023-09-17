@@ -3,19 +3,20 @@
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
     mode="inline"
+    
   >
-    <a-menu-item key="admin-dashboard">
+    <a-menu-item key="admin-dashboard" class="text-router">
       <!-- <router-link :to="{name: 'admin-users'}"> -->
       <span> <DashboardOutlined /> Trang chủ </span>
       <!-- </router-link> -->
     </a-menu-item>
     <a-menu-item key="admin-products">
-      <router-link :to="{ name: 'admin-products' }">
+      <router-link :to="{ name: 'admin-products' }" class="text-router">
         <span> <TagOutlined /> Sản phẩm </span>
       </router-link>
     </a-menu-item>
     <a-menu-item key="admin-orders">
-      <router-link :to="{ name: 'admin-orders' }">
+      <router-link :to="{ name: 'admin-orders' }" class="text-router">
         <span> <UnorderedListOutlined /> Đơn hàng </span>
       </router-link>
     </a-menu-item>
@@ -106,3 +107,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.text-router {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Use the default text color */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+</style>

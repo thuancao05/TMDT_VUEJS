@@ -46,7 +46,7 @@
               <template v-if="column.key === 'action'">
                 <router-link
                   :to="{
-                    name: 'admin-products-edit',
+                    name: 'admin-order-edit',
                     params: { id: record.dh_id },
                   }"
                 >
@@ -82,6 +82,7 @@
   
       const orders = ref([]);
       const status = ref([]);
+      
       const columns = [
         {
           title: "#",

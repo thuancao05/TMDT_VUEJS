@@ -31,8 +31,8 @@
               <span>{{ record.sp_ten }}</span>
             </template>
 
-            <template v-if="column.key === 'price'">
-              <span>{{ record.sp_gia }}</span>
+            <template v-if="column.key === 'price'" >
+              <span>{{ formatPrice(record.sp_gia) }}</span>
             </template>
 
             <template v-if="column.key === 'quantity'">
@@ -141,11 +141,15 @@ export default defineComponent({
           });
       }
     };
+    const  formatPrice = (price) => {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };    
     getProducts();
     return {
       products,
       columns,
       destroy,
+      formatPrice
     };
   },
 });

@@ -49,9 +49,9 @@
 
               <br />
               <div class="w-100">
-                <small class="text-danger" v-if="errors.name">{{
-                  errors.name[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.name"
+                  >Bắt buộc điền tên sản phẩm có độ dài tối đa 255 ký tự</small
+                >
               </div>
             </div>
           </div>
@@ -59,7 +59,6 @@
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
-                <span class="text-danger me-1">*</span>
                 <span
                   :class="{
                     'text-danger': errors.describe,
@@ -74,7 +73,7 @@
                 placeholder="Mô tả"
                 allow-clear
                 v-model:value="describe"
-                :rows="14"
+                :rows="13"
                 :class="{
                   'input-danger': errors.describe,
                 }"
@@ -108,12 +107,13 @@
                   (value) => ` ${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 "
                 :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                required
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.price">{{
-                  errors.price[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.price"
+                  >Bắt buộc nhập giá</small
+                >
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@
                 <span class="text-danger me-1">*</span>
                 <span
                   :class="{
-                    'text-danger': errors.category_id,
+                    'text-danger': errors.category,
                   }"
                   >Danh mục:</span
                 >
@@ -140,14 +140,15 @@
                 :filter-option="filterOption"
                 allow-clear
                 v-model:value="category_id"
+                required
                 :class="{
-                  'input-danger': errors.category_id,
+                  'input-danger': errors.category,
                 }"
               ></a-select>
               <div class="w-100">
-                <small class="text-danger" v-if="errors.category_id">{{
-                  errors.category_id[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.category"
+                  >Bắt buộc chọn danh mục</small
+                >
               </div>
             </div>
           </div>
@@ -168,6 +169,7 @@
             <div class="col-12 col-sm-7">
               <a-input-number
                 v-model:value="quantity"
+                required
                 :formatter="
                   (value) =>
                     ` ${quantity}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -176,9 +178,9 @@
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.quantity">{{
-                  errors.quantity[0]
-                }}</small>
+                <small class="text-danger" v-if="errors.quantity"
+                  >Bắt buộc nhập số lượng</small
+                >
               </div>
             </div>
           </div>
@@ -232,10 +234,14 @@ import axios from "axios";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
+import {
+  validateEmail,
+  validatePhoneNumber,
+  validateMaxLength,
+  validateNotEmpty,
+} from "../../../stores/validate.js";
 
 export default defineComponent({
-
-
   setup() {
     useMenu().onSelectedKeys(["admin-products"]);
 
@@ -253,16 +259,20 @@ export default defineComponent({
       quantity: "1",
       thumbUrl: "",
     });
-    const errors = ref({});
+    const errors = reactive({
+      name: false,
+      category: false,
+      price: false,
+      describe: false,
+      quantity: false,
+    });
 
     const getProductsCreate = () => {
       axios
         .get("http://localhost/TMDT/admin/apiDanhMuc.php")
         .then((response) => {
           // console.log(response);
-          // console.log(response.data[0]);
           category.value = response.data;
-          // console.log(category.value[0].dm_ten);
         })
         .catch((error) => {
           console.log(error);
@@ -272,7 +282,6 @@ export default defineComponent({
     const filterOption = (input, option) => {
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     };
-
 
     const handleFileUpload = (event) => {
       selectedFile.value = event.target.files[0];
@@ -296,18 +305,37 @@ export default defineComponent({
           alert("Thêm hình ảnh thất bại.");
         });
     };
+
+    const checkValidate = (products) => {
+      errors.category = products.category_id.length === 0;
+      errors.name =
+        !validateNotEmpty(products.name) ||
+        !validateMaxLength(products.name, 255);
+      errors.price = !validateNotEmpty(products.price);
+      errors.quantity = !validateNotEmpty(products.quantity);
+
+      if (
+        errors.category == false &&
+        errors.name == false &&
+        errors.price == false &&
+        errors.quantity == false
+      ) {
+        return true;
+      }
+    };
     const createProducts = () => {
-      axios
-        .post("http://localhost/TMDT/admin/apiTaoSanPham.php/", products)
-        .then(function (response) {
-          console.log(response.data);
-          message.success("Thêm sản phẩm thành công !");
-           router.push({name: "admin-products"})
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("Thêm sản phẩm thất bại.");
-        });;
+      if (checkValidate(products)) {
+        axios
+          .post("http://localhost/TMDT/admin/apiTaoSanPham.php/", products)
+          .then(function (response) {
+            message.success("Thêm sản phẩm thành công !");
+            router.push({ name: "admin-products" });
+          })
+          .catch((error) => {
+            console.error(error);
+            alert("Thêm sản phẩm thất bại.");
+          });
+      }
     };
     getProductsCreate();
 

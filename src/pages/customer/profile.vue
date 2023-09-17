@@ -176,21 +176,23 @@ export default defineComponent({
     const updateUser = () => {
       if(!validatePhoneNumber(user.phone)){
         isPhoneValid.value = false;
-      }
-      // axios
-      //   .post(`http://localhost/TMDT/admin/apiNguoiMua.php/`, user)
-      //   .then((response) => {
-      //     if (response.status == 200) {
-      //       console.log(response);
+      }else{
+        axios
+        .post(`http://localhost/TMDT/admin/apiNguoiMua.php/`, user)
+        .then((response) => {
+          if (response.status == 200) {
+            console.log(response);
 
-      //       // message.success("Cập nhật thành công !");
-      //       // router.push({name:"admin-users"});
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     errors.value = error.response.data.errors;
-      //   });
+            // message.success("Cập nhật thành công !");
+            // router.push({name:"admin-users"});
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          errors.value = error.response.data.errors;
+        });
+      }
+
     };
 
     const filterOption = (input, option) => {
