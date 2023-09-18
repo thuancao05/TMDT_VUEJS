@@ -151,11 +151,11 @@
       };
   
       const destroy = (id) => {
-        if (confirm("Bạn có chắc chắn muốn xóa đơn hàng: " + id)) {
+        if (confirm("Bạn có chắc chắn muốn hủy đơn hàng - ID: " + id)) {
           axios
             .delete(`http://localhost/TMDT/admin/apiDonHang.php?id=${id}`, id)
             .then(function (response) {
-              message.success("Xóa thành công !");
+              message.success("Hủy thành công !");
               console.log(response);
               getOrders();
             })

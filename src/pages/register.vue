@@ -106,7 +106,8 @@ export default defineComponent({
       isEmailValid,
       authenticated,
       ...toRefs(user),
-      login
+      login,
+      register
     };
   },
 });

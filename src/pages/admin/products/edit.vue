@@ -7,10 +7,10 @@
             <div class="col-12 d-flex justify-content-center mb-3">
               <div id="image"></div>
               <div>
-                <h2>Tải lên hình ảnh</h2>
+                <h4>Tải lên hình ảnh</h4>
                 <input type="file" @change="handleFileUpload" ref="fileInput" />
                 <br />
-                <button @click="uploadImage" class="mt-2">Upload</button>
+                <button @click="uploadImage" class="mt-2" upload>Upload</button>
                 <br />
                 <!-- Display the uploaded image -->
                 <img
@@ -374,5 +374,12 @@ export default defineComponent({
 }
 .input-danger {
   border-color: red;
+}
+.upload {
+  background-color: cadetblue;
+  color: white;
+  padding: 5px;
+  margin-bottom: 20px;
+  border-radius: 5px;
 }
 </style>

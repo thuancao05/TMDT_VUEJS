@@ -37,6 +37,19 @@
               <span>{{ phone }}</span>
             </div>
           </div>
+
+          <div class="row mb-3">
+            <div class="col-12 col-sm-3 text-start text-sm-end">
+              <label>
+                <span>Địa chỉ:</span>
+              </label>
+            </div>
+
+            <div class="col-12 col-sm-8">
+              <span>{{ address }}</span>
+            </div>
+          </div>
+
           <div class="row mb-3">
             <div class="col-12 col-sm-3 text-start text-sm-end">
               <label>
@@ -131,7 +144,7 @@
           <button @click="printPage" class="me-0 me-sm-2 mb-3 mb-sm-0"> In hóa đơn </button>
           <router-link :to="{ name: 'admin-orders' }">
             <a-button class="me-0 me-sm-2 mb-3 mb-sm-0">
-              <span>Hủy</span>
+              <span>Trở lại</span>
             </a-button>
           </router-link>
           <a-button type="primary" html-type="submit">
@@ -167,6 +180,8 @@ export default defineComponent({
       totalItem: "",
       phone: "",
       status_id: "",
+      address: "",
+
     });
     const columns = [
       {
@@ -224,8 +239,10 @@ export default defineComponent({
       axios
         .post(`http://localhost/TMDT/admin/apiDonHang.php/`, id)
         .then((response) => {
+          // console.log(response);
           orders.name = response.data[0].nm_ten;
           orders.phone = response.data[0].nm_sdt;
+          orders.address = response.data[0].dc_sonha + ", " + response.data[0].dc_xa + ", " +response.data[0].dc_tinh + ", " +response.data[0].dc_thanhpho;;
           orders.note = response.data[0].dh_ghiChu;
           orders.totalSum = response.data[0].dh_tongThanhToan;
           orders.totalItem = response.data[0].dh_soLuong;

@@ -7,7 +7,7 @@
             <div class="col-12 d-flex justify-content-center mb-3">
               <div id="image"></div>
               <div>
-                <h2>Tải lên hình ảnh</h2>
+                <h4>Tải lên hình ảnh đại diện</h4>
                 <input type="file" @change="handleFileUpload" ref="fileInput" />
                 <br />
                 <button @click="uploadImage" class="mt-2 upload">Upload</button>

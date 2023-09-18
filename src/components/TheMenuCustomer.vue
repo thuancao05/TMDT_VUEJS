@@ -4,15 +4,15 @@
     v-model:selectedKeys="selectedKeys"
     mode="inline"
   >
-    <a-menu-item key="customer-profile">
-      <!-- <router-link :to="{name: 'admin-users'}"> -->
+    <a-menu-item key="customer-profile" >
+      <router-link :to="{name: 'customer-profile'}" class="text-router">
       <span> <DashboardOutlined /> Hồ sơ </span>
-      <!-- </router-link> -->
+      </router-link>
     </a-menu-item>
     <a-menu-item key="customer-orders">
-      <!-- <router-link :to="{ name: 'admin-products' }"> -->
+      <router-link :to="{ name: 'customer-orders' }"  class="text-router">
         <span> <TagOutlined /> Đơn hàng của bạn </span>
-      <!-- </router-link> -->
+      </router-link>
     </a-menu-item>
     <a-menu-item key="customer-address">
       <!-- <router-link :to="{ name: 'admin-orders' }"> -->
@@ -20,7 +20,7 @@
       <!-- </router-link> -->
     </a-menu-item>
     <a-menu-item key="customer-products">
-      <router-link :to="{name: 'customer-products'}">
+      <router-link :to="{name: 'customer-products'}" class="text-router">
       <span> <AppstoreOutlined /> Trở về trang mua hàng </span>
       </router-link>
     </a-menu-item>
@@ -87,3 +87,12 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.text-router {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Use the default text color */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+</style>
+

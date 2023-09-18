@@ -45,7 +45,7 @@
       <template #footer>
         <h4>
           Tổng cộng - Số lượng sản phẩm:
-          <b style="margin: auto 5px">{{ formatPrice(totalItem) }} Cái </b>
+          <b style="margin: auto 5px">{{ totalItem }} Cái </b>
           || Thành tiền:
           <b style="color: red; margin-left: 5px">
             {{ formatPrice(totalSum) }} Đ</b
@@ -131,7 +131,6 @@ export default defineComponent({
           // handle success
           // console.log(response);
           products.value = response.data;
-          // console.log(products);
         })
         .catch(function (error) {
           // handle error
@@ -159,22 +158,14 @@ export default defineComponent({
     };
     // Calculate the total sum using a computed property
     const totalSum = computed(() => {
-      if (products[4] !== undefined) {
-        return products.value.reduce((sum, product) => {
-          return sum + product[3] * product[4]; // Assuming price is at index 3 and quantity at index 4
-        }, 0);
-      } else {
-        return 0;
-      }
+      return products.value.reduce((sum, product) => {
+        return sum + product[3] * product[4]; // Assuming price is at index 3 and quantity at index 4
+      }, 0);
     });
     const totalItem = computed(() => {
-      if (products[4] !== undefined) {
-        return products.value.reduce((sum, product) => {
-          return sum + product[4]; // Assuming price is at index 3 and quantity at index 4
-        }, 0);
-      } else {
-        return 0;
-      }
+      return products.value.reduce((sum, product) => {
+        return sum + product[4]; // Assuming price is at index 3 and quantity at index 4
+      }, 0);
     });
     const formatPrice = (price) => {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

@@ -108,8 +108,51 @@
           </div>
 
           <div class="col-12 col-sm-8">
-            <a-textarea placeholder="Địa chỉ" allow-clear v-model:value="address" />
+            <a-textarea
+              placeholder="Địa chỉ"
+              allow-clear
+              v-model:value="address"
+            />
             <br />
+          </div>
+
+          <div class="col-12 col-sm-12 d-flex m-2">
+            <div class="col-12 col-sm-4">
+              <a-select
+                show-search
+                placeholder="Tỉnh"
+                style="width: 100%"
+                :options="city"
+                :filter-option="filterOption"
+                allow-clear
+                v-model:value="city_id"
+                @change="selectDistrict()"
+              ></a-select>
+            </div>
+
+            <div class="col-12 col-sm-4">
+              <a-select
+                show-search
+                placeholder="Quận"
+                style="width: 100%"
+                :options="district"
+                :filter-option="filterOption"
+                allow-clear
+                v-model:value="district_id"
+                @change="selectWard()"
+              ></a-select>
+            </div>
+            <div class="col-12 col-sm-4">
+              <a-select
+                show-search
+                placeholder="Xã"
+                style="width: 100%"
+                :options="ward"
+                :filter-option="filterOption"
+                allow-clear
+                v-model:value="ward_id"
+              ></a-select>
+            </div>
           </div>
         </div>
 
@@ -121,10 +164,9 @@
           </div>
 
           <div class="col-12 col-sm-8">
-            <a-input placeholder="Ghi chú" allow-clear v-model:value="note"/>
+            <a-input placeholder="Ghi chú" allow-clear v-model:value="note" />
             <br />
           </div>
-
         </div>
         <div class="row">
           <div class="col-12 m-3 d-sm-flex justify-content-sm-center">
@@ -133,14 +175,17 @@
                 <span>Trở lại</span>
               </a-button>
             </router-link>
-      
-            <a-button type="primary" html-type="submit" style="margin-left: 30px">
+
+            <a-button
+              type="primary"
+              html-type="submit"
+              style="margin-left: 30px"
+            >
               <span>Đặt hàng </span>
             </a-button>
-      
+          </div>
         </div>
       </div>
-    </div>
     </div>
   </form>
 </template>
@@ -159,7 +204,10 @@ export default defineComponent({
       email: "",
       phone: "",
       fullname: "",
-    }); 
+      city_id: [],
+      district_id: [],
+      ward_id: [],
+    });
     const note = ref("");
     const address = ref("");
     const columns = [
@@ -200,6 +248,58 @@ export default defineComponent({
       },
     ];
 
+    const city = ref([]);
+    const district = ref([]);
+    const ward = ref([]);
+
+    const getCity = () => {
+      axios
+        .get("http://localhost/TMDT/admin/apiThanhPho.php")
+        .then(function (response) {
+          city.value = response.data;
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    };
+
+    const selectDistrict = () => {
+      const id = user.city_id;
+      axios
+        .post(`http://localhost/TMDT/admin/apiQuan.php`, {
+          params: {
+            ID: id,
+          },
+        })
+        .then(function (response) {
+          // console.log(response);
+          district.value = response.data;
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    };
+
+    const selectWard = () => {
+      const id = user.district_id;
+      axios
+        .post(`http://localhost/TMDT/admin/apiXa.php`, {
+          params: {
+            ID: id,
+          },
+        })
+        .then(function (response) {
+          // console.log(response);
+          ward.value = response.data;
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    };
+
     const getCart = () => {
       axios
         .get("http://localhost/TMDT/admin/apiThemSPVaoGioHang.php")
@@ -219,8 +319,6 @@ export default defineComponent({
       axios
         .get("http://localhost/TMDT/admin/apiNguoiMua.php")
         .then(function (response) {
-          // handle success
-          // console.log(response);
           user.fullname = response.data[0].nm_ten;
           user.email = response.data[0].nm_email;
           user.phone = response.data[0].nm_sdt;
@@ -228,11 +326,14 @@ export default defineComponent({
           axios
             .get("http://localhost/TMDT/admin/apiDiaChiNguoiMua.php")
             .then(function (response) {
-              // handle success
-              // console.log(response);
-               address.value = response.data[0].sonha + ", " + response.data[0].tenxa + ", " +response.data[0].tentinh + ", " +response.data[0].tentp;
-              // email = user.email;
-              // console.log(user);
+              address.value =
+                response.data[0].sonha +
+                ", " +
+                response.data[0].tenxa +
+                ", " +
+                response.data[0].tentinh +
+                ", " +
+                response.data[0].tentp;
             })
             .catch(function (error) {
               // handle error
@@ -270,32 +371,16 @@ export default defineComponent({
           ghichu: note.value,
         })
         .then(function (response) {
-          console.log(response.data);
-          message.success("Đặt hàng thành công")
-          router.push({name: "cart"})
-
+          // console.log(response.data);
+          message.success("Đặt hàng thành công");
+          router.push({ name: "customer-orders" });
         })
         .catch((error) => {
           console.error(error);
           alert("Đặt hàng thất bại.");
         });
     };
-
-    const checkAuth = () => {
-      axios
-        .get(`http://localhost/TMDT/admin/check-auth.php`)
-        .then((response) => {
-          // console.log(response);
-          if (response.data.user != "admin") {
-            router.push({ name: "login" });
-          }
-        })
-        .catch((error) => {
-          router.push({ name: "login" });
-          console.log(error);
-        });
-    };
-    // checkAuth();
+    getCity();
     getCart();
     getUser();
     return {
@@ -309,6 +394,11 @@ export default defineComponent({
       filterOption,
       address,
       note,
+      city,
+      district,
+      ward,
+      selectDistrict,
+      selectWard
     };
   },
 });
