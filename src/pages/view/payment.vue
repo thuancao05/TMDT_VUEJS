@@ -67,6 +67,10 @@
               v-model:value="fullname"
             />
             <br />
+            <div class="w-100">
+              <small class="text-danger" v-if="errors.name"
+                >Bắt buộc điền họ và tên tối đa 255 ký tự</small>
+            </div>
           </div>
         </div>
 
@@ -84,6 +88,10 @@
               v-model:value="phone"
             />
             <br />
+            <div class="w-100">
+              <small class="text-danger" v-if="errors.phone"
+                >Bắt buộc điền số điện thoại đúng định dạng</small>
+            </div>
           </div>
         </div>
 
@@ -97,6 +105,11 @@
           <div class="col-12 col-sm-8">
             <a-input placeholder="Email" allow-clear v-model:value="email" />
             <br />
+
+            <div class="w-100">
+              <small class="text-danger" v-if="errors.email"
+                >Bắt buộc điền email đúng định dạng</small>
+            </div>
           </div>
         </div>
 
@@ -154,6 +167,11 @@
               ></a-select>
             </div>
           </div>
+          <div class="w-100 text-center">
+            <small class="text-danger" v-if="errors.address"
+              >Bắt buộc chọn địa chỉ</small
+            >
+          </div>
         </div>
 
         <div class="row mb-3">
@@ -166,6 +184,11 @@
           <div class="col-12 col-sm-8">
             <a-input placeholder="Ghi chú" allow-clear v-model:value="note" />
             <br />
+            <div class="w-100">
+              <small class="text-danger" v-if="errors.note"
+                >Điền ghi chú tối đa 255 ký tự</small
+              >
+            </div>
           </div>
         </div>
         <div class="row">
@@ -194,11 +217,23 @@
 import { defineComponent, ref, computed, toRefs, reactive } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import {
+  validateEmail,
+  validatePhoneNumber,
+  validateMaxLength,
+  validateNotEmpty,
+} from "../../stores/validate.js";
 
 export default defineComponent({
   setup() {
     const router = useRouter();
-
+    const errors = reactive({
+      name: false,
+      phone: false,
+      email: false,
+      address: false,
+      note: false,
+    });
     const products = ref([]); // Initialize as an empty array
     const user = reactive({
       email: "",
@@ -326,14 +361,7 @@ export default defineComponent({
           axios
             .get("http://localhost/TMDT/admin/apiDiaChiNguoiMua.php")
             .then(function (response) {
-              address.value =
-                response.data[0].sonha +
-                ", " +
-                response.data[0].tenxa +
-                ", " +
-                response.data[0].tentinh +
-                ", " +
-                response.data[0].tentp;
+              address.value = "";
             })
             .catch(function (error) {
               // handle error
@@ -364,21 +392,61 @@ export default defineComponent({
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     };
     const order = () => {
-      axios
-        .post("http://localhost/TMDT/admin/apiTaoDonHang.php/", {
-          tongtien: totalSum.value,
-          tongSL: totalItem.value,
-          ghichu: note.value,
-        })
-        .then(function (response) {
-          // console.log(response.data);
-          message.success("Đặt hàng thành công");
-          router.push({ name: "customer-orders" });
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("Đặt hàng thất bại.");
-        });
+      if (checkValidate() == true) {
+        axios
+          .post("http://localhost/TMDT/admin/apiDiaChiNguoiMua.php", {
+            matp: user.city_id,
+            maqh: user.district_id,
+            maxa: user.ward_id,
+            sonha: address.value,
+          })
+          .then(function (response) {
+            // console.log(response)
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+
+        axios
+          .post("http://localhost/TMDT/admin/apiTaoDonHang.php/", {
+            tongtien: totalSum.value,
+            tongSL: totalItem.value,
+            ghichu: note.value,
+          })
+          .then(function (response) {
+            // console.log(response);
+            message.success("Đặt hàng thành công");
+            router.push({ name: "customer-products" });
+          })
+          .catch((error) => {
+            console.error(error);
+            alert("Đặt hàng thất bại.");
+          });
+      }
+    };
+
+    const checkValidate = () => {
+      errors.address = user.city_id.length === 0;
+      errors.address = user.district_id.length === 0;
+      errors.address = user.ward_id.length === 0;
+
+      errors.name =
+        !validateNotEmpty(user.fullname) ||
+        !validateMaxLength(user.fullname, 255);
+      errors.phone = !validatePhoneNumber(user.phone);
+      errors.email = !validateEmail(user.email);
+      errors.note = !validateMaxLength(note.value, 255);
+
+      if (
+        errors.address == false &&
+        errors.name == false &&
+        errors.phone == false &&
+        errors.email == false &&
+        errors.note == false
+      ) {
+        return true;
+      }
     };
     getCity();
     getCart();
@@ -398,7 +466,8 @@ export default defineComponent({
       district,
       ward,
       selectDistrict,
-      selectWard
+      selectWard,
+      errors,
     };
   },
 });

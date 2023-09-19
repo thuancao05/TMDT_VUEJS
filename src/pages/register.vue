@@ -7,15 +7,33 @@
       class="justify-content-sm-center"
     />
     <h2>Register</h2>
-    <form @submit.prevent="register" class="login-form justify-content-sm-center">
+    <form
+      @submit.prevent="register"
+      class="login-form justify-content-sm-center"
+    >
       <div class="form-group">
         <label for="email">Your name:</label>
         <a-input
           placeholder="Tên người dùng"
           allow-clear
           v-model:value="name"
-          required
         />
+        <div class="w-100">
+          <small class="text-danger" v-if="errors.name"
+            >Bắt buộc điền họ và tên tối đa 255 ký tự</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="phone">Your phone number:</label>
+        <a-input
+          placeholder="Số điện thoại"
+          allow-clear
+          v-model:value="phone"
+        />
+        <div class="w-100">
+          <small class="text-danger" v-if="errors.phone"
+            >Bắt buộc điền số điện thoại đúng định dạng</small>
+        </div>
       </div>
 
       <div class="form-group">
@@ -24,11 +42,11 @@
           placeholder="Email"
           allow-clear
           v-model:value="email"
-          required
         />
-        <span v-if="!isEmailValid" class="error-message"
-          >Email không đúng định dạng !</span
-        >
+        <div class="w-100">
+          <small class="text-danger" v-if="errors.email"
+            >Bắt buộc điền email đúng định dạng</small>
+        </div>
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
@@ -36,16 +54,18 @@
           placeholder="Mật khẩu"
           v-model:value="password"
           allow-clear
-          required
         />
+        <div class="w-100">
+          <small class="text-danger" v-if="errors.password"
+            >Bắt buộc điền mật khẩu tối đa 255 ký tự</small>
+        </div>
       </div>
       <span v-if="authenticated" class="error-message">
         Email đã được đăng ký trước đó !</span
       >
-        <button type="submit" class="btn-login" >Register</button>
+      <button type="submit" class="btn-login">Register</button>
     </form>
     <button class="btn-register login-container" @click="login()">Login</button>
-
   </div>
 </template>
   
@@ -54,6 +74,12 @@ import { defineComponent, ref, onMounted, reactive, toRefs } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { message } from "ant-design-vue";
+import {
+  validateEmail,
+  validatePhoneNumber,
+  validateMaxLength,
+  validateNotEmpty,
+} from "../stores/validate.js";
 
 export default defineComponent({
   setup() {
@@ -63,8 +89,32 @@ export default defineComponent({
     const user = reactive({
       email: "",
       password: "",
-      name: ""
+      name: "",
+      phone: "",
     });
+    const errors = reactive({
+      name: false,
+      phone: false,
+      email: false,
+      password: false,
+    });
+    const checkValidate = () => {
+      errors.phone = !validatePhoneNumber(user.phone);
+      errors.email = !validateEmail(user.email);
+      errors.name =
+        !validateNotEmpty(user.name) || !validateMaxLength(user.name, 255);
+      errors.password = !validateNotEmpty(user.password);
+
+      if (
+        errors.name == false &&
+        errors.phone == false &&
+        errors.email == false &&
+        errors.password == false
+      ) {
+        return true;
+      }
+    };
+
     const validateEmail = (email) => {
       // Regular expression for basic email validation
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -72,23 +122,21 @@ export default defineComponent({
     };
 
     const register = () => {
-      if (!validateEmail(user.email)) {
-        isEmailValid.value = false;
-      } else {
+      if (checkValidate() == true ) {
+      
         axios
           .post("http://localhost/TMDT/admin/apiSigup.php/", user)
           .then((response) => {
             // console.log(response.data);
             if (response.data == "Email already exists") {
               authenticated.value = true;
-            } else if(response.data == "Register Fail !") {
+            } else if (response.data == "Register Fail !") {
               // console.log("Thất bại !");
-              message.error("Đăng ký thất bại !")
-
-            }else{
+              message.error("Đăng ký thất bại !");
+            } else {
               // console.log("Thành công");
-              message.success("Đăng ký thành công !")
-              router.push({name: "login"});
+              message.success("Đăng ký thành công !");
+              router.push({ name: "login" });
             }
           })
           .catch((error) => {
@@ -97,17 +145,17 @@ export default defineComponent({
       }
     };
 
-    const login = () =>{
+    const login = () => {
       router.push({ name: "login" });
-    }
-
+    };
 
     return {
       isEmailValid,
       authenticated,
       ...toRefs(user),
       login,
-      register
+      register,
+      errors
     };
   },
 });
@@ -166,7 +214,7 @@ input[type="password"] {
 .btn-login:hover {
   background-color: #0056b3;
 }
-.btn-register{
+.btn-register {
   padding: 10px;
   background-color: #9ea2a7;
   color: #fff;
