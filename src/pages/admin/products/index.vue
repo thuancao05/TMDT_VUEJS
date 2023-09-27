@@ -126,13 +126,13 @@ export default defineComponent({
         });
     };
 
-    const destroy = (id, username) => {
-      if (confirm("Bạn có chắc chắn muốn xóa sản phẩm: " + username)) {
+    const destroy = (id, name) => {
+      if (confirm("Bạn có chắc chắn muốn xóa sản phẩm: " + name)) {
         axios
           .delete(`http://localhost/TMDT/admin/apiTaoSanPham.php?id=${id}`, id)
           .then(function (response) {
             message.success("Xóa thành công !");
-            // console.log(response);
+            console.log(response);
             getProducts();
           })
           .catch(function (error) {

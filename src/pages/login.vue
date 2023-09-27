@@ -14,10 +14,10 @@
           placeholder="Email"
           allow-clear
           v-model:value="email"
-          required
+          id="emailInput"
         />
-        <span v-if="!isEmailValid" class="error-message"
-          >Email không đúng định dạng !</span
+        <span v-if="errors.email" class="error-message"
+          >Bắt buộc nhập email đúng định dạng !</span
         >
       </div>
       <div class="form-group">
@@ -26,16 +26,24 @@
           placeholder="Mật khẩu"
           v-model:value="password"
           allow-clear
-          required
+          id="passwordInput"
         />
+        <span v-if="errors.password" class="error-message"
+        >Bắt buộc nhập mật khẩu !</span
+      >
       </div>
       <span v-if="authenticated" class="error-message">
         Sai tên đăng nhập hoặc mật khẩu !</span
       >
-        <button type="submit" class="btn-login" >Login</button>
+      <button type="submit" class="btn-login" id="loginButton">Login</button>
     </form>
-    <button class="btn-register login-container" @click="register()">Register</button>
-
+    <button
+      id="registerButton"
+      class="btn-register login-container"
+      @click="register()"
+    >
+      Register
+    </button>
   </div>
 </template>
   
@@ -44,7 +52,12 @@ import { defineComponent, ref, onMounted, reactive, toRefs } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { message } from "ant-design-vue";
-
+import {
+  validateEmail,
+  validatePhoneNumber,
+  validateMaxLength,
+  validateNotEmpty,
+} from "../stores/validate.js";
 export default defineComponent({
   setup() {
     const isEmailValid = ref(true); // Initially assume email is valid
@@ -53,6 +66,10 @@ export default defineComponent({
     const user = reactive({
       email: "thuan@gmail.com",
       password: "thuan123",
+    });
+    const errors = reactive({
+      email: false,
+      password: false,
     });
     const validateEmail = (email) => {
       // Regular expression for basic email validation
@@ -74,23 +91,30 @@ export default defineComponent({
           console.log(error);
         });
     };
+    const checkValidate = () => {
+      errors.email = !validateEmail(user.email);
+      errors.password = !validateNotEmpty(user.password);
+
+      if (errors.email == false && errors.password == false) {
+        return true;
+      }
+    };
     const login = () => {
-      if (!validateEmail(user.email)) {
-        isEmailValid.value = false;
-      } else {
-        axios
-          .post("http://localhost/TMDT/admin/apiLogin.php/", user)
-          .then((response) => {
-            console.log(response.data);
-            if (response.data == "Login_fail") {
-              authenticated.value = true;
-            } else {
-              checkAuth();
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      if (checkValidate() == true) {
+          axios
+            .post("http://localhost/TMDT/admin/apiLogin.php/", user)
+            .then((response) => {
+              console.log(response.data);
+              if (response.data == "Login_fail") {
+                authenticated.value = true;
+              } else {
+                checkAuth();
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        
       }
     };
 
@@ -98,16 +122,16 @@ export default defineComponent({
       checkAuth();
     });
 
-    const register = () =>{
+    const register = () => {
       router.push({ name: "register" });
-    }
+    };
 
     return {
       login,
-      isEmailValid,
       authenticated,
       ...toRefs(user),
-      register
+      register,
+      errors
     };
   },
 });
@@ -166,7 +190,7 @@ input[type="password"] {
 .btn-login:hover {
   background-color: #0056b3;
 }
-.btn-register{
+.btn-register {
   margin: 20px;
   padding: 10px;
   background-color: #9ea2a7;
