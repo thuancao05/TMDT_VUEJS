@@ -6,7 +6,7 @@
       }"
       class="text-white"
     >
-      <div class="logo">
+      <div class="logo" id="logo">
         <img src="../assets/logo.png" alt="Logo" style="max-width: 60px" />
         Sáng Tạo Điện Tử
       </div>
@@ -24,8 +24,8 @@
           </router-link>
         </li>
 
-        <li>
-          <a href="#" @click="logout()">
+        <li >
+          <a id="logoutBtn" href="#" @click="logout()">
             <LogoutOutlined />
           </a>
         </li>

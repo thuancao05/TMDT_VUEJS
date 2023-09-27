@@ -16,7 +16,7 @@
           v-model:value="email"
           id="emailInput"
         />
-        <span v-if="errors.email" class="error-message"
+        <span v-if="errors.email" class="error-message" id="validateEmail"
           >Bắt buộc nhập email đúng định dạng !</span
         >
       </div>
@@ -28,11 +28,11 @@
           allow-clear
           id="passwordInput"
         />
-        <span v-if="errors.password" class="error-message"
+        <span v-if="errors.password" class="error-message" id="validatePassword"
         >Bắt buộc nhập mật khẩu !</span
       >
       </div>
-      <span v-if="authenticated" class="error-message">
+      <span v-if="authenticated" class="error-message" id="validateAuthentication"> 
         Sai tên đăng nhập hoặc mật khẩu !</span
       >
       <button type="submit" class="btn-login" id="loginButton">Login</button>

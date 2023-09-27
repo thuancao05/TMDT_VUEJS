@@ -17,9 +17,10 @@
           placeholder="Tên người dùng"
           allow-clear
           v-model:value="name"
+          id="nameInput"
         />
         <div class="w-100">
-          <small class="text-danger" v-if="errors.name"
+          <small class="text-danger" v-if="errors.name" id="validateName"
             >Bắt buộc điền họ và tên tối đa 255 ký tự</small>
         </div>
       </div>
@@ -29,9 +30,11 @@
           placeholder="Số điện thoại"
           allow-clear
           v-model:value="phone"
+          id="phoneInput"
+
         />
         <div class="w-100">
-          <small class="text-danger" v-if="errors.phone"
+          <small class="text-danger" v-if="errors.phone" id="validatePhone"
             >Bắt buộc điền số điện thoại đúng định dạng</small>
         </div>
       </div>
@@ -42,9 +45,11 @@
           placeholder="Email"
           allow-clear
           v-model:value="email"
+          id="emailInput"
+
         />
         <div class="w-100">
-          <small class="text-danger" v-if="errors.email"
+          <small class="text-danger" v-if="errors.email" id="validateEmail"
             >Bắt buộc điền email đúng định dạng</small>
         </div>
       </div>
@@ -54,18 +59,20 @@
           placeholder="Mật khẩu"
           v-model:value="password"
           allow-clear
+          id="passwordInput"
+
         />
         <div class="w-100">
-          <small class="text-danger" v-if="errors.password"
+          <small class="text-danger" v-if="errors.password" id="validatePassword"
             >Bắt buộc điền mật khẩu tối đa 255 ký tự</small>
         </div>
       </div>
-      <span v-if="authenticated" class="error-message">
+      <span v-if="authenticated" class="error-message" id="validateRegister">
         Email đã được đăng ký trước đó !</span
       >
-      <button type="submit" class="btn-login">Register</button>
+      <button type="submit" class="btn-login" id="registerBtn">Register</button>
     </form>
-    <button class="btn-register login-container" @click="login()">Login</button>
+    <button class="btn-register login-container" id="loginBtn" @click="login()">Login</button>
   </div>
 </template>
   
@@ -136,7 +143,7 @@ export default defineComponent({
             } else {
               // console.log("Thành công");
               message.success("Đăng ký thành công !");
-              router.push({ name: "login" });
+              // router.push({ name: "login" });
             }
           })
           .catch((error) => {
