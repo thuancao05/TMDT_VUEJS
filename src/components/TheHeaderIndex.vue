@@ -14,12 +14,12 @@
     <nav>
       <ul>
         <li>
-          <router-link :to="{ name: 'cart' }">
+          <router-link :to="{ name: 'cart' }" id="cartBtn" >
             <ShoppingCartOutlined />
           </router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'customer-profile' }">
+          <router-link :to="{ name: 'customer-profile' }" id="userProfileBtn" >
             <UserOutlined />
           </router-link>
         </li>
@@ -41,6 +41,7 @@
       placeholder="Bạn cần tìm sản phẩm nào..."
       style="width: 300px"
       @search="onSearch()"
+      id="inputSearch"
     />
   </div>
 </template>

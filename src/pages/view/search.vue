@@ -12,7 +12,7 @@
   <!-- star list products -->
   <div class="mt-3 col-sm-12">
     <div class="row">
-        <h3>Kết quả tìm kiếm cho: {{ searchKey }}</h3>
+        <h3><span id="totalSearch">{{ totalSearch }}</span> kết quả tìm kiếm cho: {{ searchKey }}</h3>
 
       <div v-for="product in products" :key="product.id" class="col-md-4 mb-4">
         <div class="card">
@@ -112,8 +112,7 @@ export default defineComponent({
     });
 
     const route = useRoute();
-    const router = useRouter();
-
+    const totalSearch = computed(() => products.value.length);
     const key = route.params.id;
     // console.log(key)
 
@@ -124,10 +123,10 @@ export default defineComponent({
         })
         .then(function (response) {
           // handle success
-            // console.log(response);
-            searchKey.value = keyToSearch;
-
+          // console.log(response);
+          searchKey.value = keyToSearch;
           products.value = response.data;
+
         })
         .catch(function (error) {
           // handle error
@@ -146,7 +145,6 @@ export default defineComponent({
       }
       next();
     });
-
     getProductsWithKeySearch(key);
     return {
       images,
@@ -157,7 +155,7 @@ export default defineComponent({
       products,
       formatPrice,
       searchKey,
-      
+      totalSearch
     };
   },
 });

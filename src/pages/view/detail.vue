@@ -18,7 +18,7 @@
       <div class="col-12 col-sm-9">
         <div class="row mb-3">
           <div class="col-12 col-sm-13 ml-3">
-            <h4>{{ name }}</h4>
+            <h4 id="nameProduct"> {{ name }}</h4>
           </div>
         </div>
 
@@ -48,7 +48,7 @@
           </div>
 
           <div class="col-12 col-sm-8">
-            <a-input-number v-model:value="quantity_value" :min="1" />
+            <a-input-number v-model:value="quantity_value" :min="1" id="quantityProduct"/>
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@
           </a-button>
         </router-link>
 
-        <a-button type="primary" style="margin-left: 30px" @click="addToCart(id,quantity_value)">
+        <a-button id="addToCartButton" type="primary" style="margin-left: 30px" @click="addToCart(id,quantity_value)">
           <span>Thêm vào giỏ hàng</span>
         </a-button>
       </div>

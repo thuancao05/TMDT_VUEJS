@@ -1,7 +1,7 @@
 <template>
   <footer class="footer mt-auto py-3 bg-light">
     <div class="container text-center">
-      <h5>Thông Tin Liên Hệ</h5>
+      <h6>Thông Tin Liên Hệ</h6>
       
         Địa chỉ: Số 01 Hẻm 216 Đường 3/2, Hưng Lợi, Ninh Kiều, Tp Cần Thơ.
         <br />
