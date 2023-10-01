@@ -22,7 +22,7 @@
         </div>
 
         <template v-if="column.key === 'product_name'">
-          <span>{{ record[1] }}</span>
+          {{ record[1] }}
         </template>
 
         <template v-if="column.key === 'price'">
@@ -30,7 +30,7 @@
         </template>
 
         <template v-if="column.key === 'quantity'">
-          <a-input-number v-model:value="record[4]" :min="1" />
+          {{ record[4] }}
         </template>
         <template v-if="column.key === 'sum'">
           <span>{{ formatPrice(record[3] * record[4]) }}</span>
@@ -64,7 +64,7 @@
       </router-link>
 
       <router-link :to="{ name: 'payment' }" class="mr-2 md-3">
-        <a-button type="primary" style="margin-left: 30px">
+        <a-button id="orderButton" type="primary" style="margin-left: 30px">
           <h5>Đặt hàng</h5>
         </a-button>
       </router-link>
