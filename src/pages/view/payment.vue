@@ -65,10 +65,11 @@
               placeholder="Tên người nhận"
               allow-clear
               v-model:value="fullname"
+              id="nameInput"
             />
             <br />
             <div class="w-100">
-              <small class="text-danger" v-if="errors.name"
+              <small class="text-danger" v-if="errors.name" id="errorNameMessage"
                 >Bắt buộc điền họ và tên tối đa 255 ký tự</small>
             </div>
           </div>
@@ -86,10 +87,12 @@
               placeholder="Số điện thoại"
               allow-clear
               v-model:value="phone"
+              id="phoneInput"
+
             />
             <br />
             <div class="w-100">
-              <small class="text-danger" v-if="errors.phone"
+              <small class="text-danger" v-if="errors.phone" id="errorPhoneMessage"
                 >Bắt buộc điền số điện thoại đúng định dạng</small>
             </div>
           </div>
@@ -103,11 +106,14 @@
           </div>
 
           <div class="col-12 col-sm-8">
-            <a-input placeholder="Email" allow-clear v-model:value="email" />
+            <a-input placeholder="Email" allow-clear v-model:value="email"               
+              id="emailInput"
+            />
+            
             <br />
 
             <div class="w-100">
-              <small class="text-danger" v-if="errors.email"
+              <small class="text-danger" v-if="errors.email" id="errorEmailMessage"
                 >Bắt buộc điền email đúng định dạng</small>
             </div>
           </div>
@@ -125,6 +131,8 @@
               placeholder="Địa chỉ"
               allow-clear
               v-model:value="address"
+              id="addressInput"
+
             />
             <br />
           </div>
@@ -140,6 +148,8 @@
                 allow-clear
                 v-model:value="city_id"
                 @change="selectDistrict()"
+                id="citySelect"
+
               ></a-select>
             </div>
 
@@ -153,6 +163,8 @@
                 allow-clear
                 v-model:value="district_id"
                 @change="selectWard()"
+                id="districtSelect"
+
               ></a-select>
             </div>
             <div class="col-12 col-sm-4">
@@ -164,11 +176,13 @@
                 :filter-option="filterOption"
                 allow-clear
                 v-model:value="ward_id"
+                id="wardSelect"
+
               ></a-select>
             </div>
           </div>
           <div class="w-100 text-center">
-            <small class="text-danger" v-if="errors.address"
+            <small class="text-danger" v-if="errors.address" id="errorAddressMessage"
               >Bắt buộc chọn địa chỉ</small
             >
           </div>
@@ -182,10 +196,12 @@
           </div>
 
           <div class="col-12 col-sm-8">
-            <a-input placeholder="Ghi chú" allow-clear v-model:value="note" />
+            <a-input placeholder="Ghi chú" allow-clear v-model:value="note"
+              id="noteInput"
+            />
             <br />
             <div class="w-100">
-              <small class="text-danger" v-if="errors.note"
+              <small class="text-danger" v-if="errors.note" id="errorNoteMessage"
                 >Điền ghi chú tối đa 255 ký tự</small
               >
             </div>
@@ -203,6 +219,8 @@
               type="primary"
               html-type="submit"
               style="margin-left: 30px"
+              id="submitButton"
+
             >
               <span>Đặt hàng </span>
             </a-button>
