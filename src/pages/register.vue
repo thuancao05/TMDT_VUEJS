@@ -21,7 +21,8 @@
         />
         <div class="w-100">
           <small class="text-danger" v-if="errors.name" id="validateName"
-            >Bắt buộc điền họ và tên tối đa 255 ký tự</small>
+            >Bắt buộc điền họ và tên tối đa 255 ký tự</small
+          >
         </div>
       </div>
       <div class="form-group">
@@ -31,11 +32,11 @@
           allow-clear
           v-model:value="phone"
           id="phoneInput"
-
         />
         <div class="w-100">
           <small class="text-danger" v-if="errors.phone" id="validatePhone"
-            >Bắt buộc điền số điện thoại đúng định dạng</small>
+            >Bắt buộc điền số điện thoại đúng định dạng</small
+          >
         </div>
       </div>
 
@@ -46,11 +47,11 @@
           allow-clear
           v-model:value="email"
           id="emailInput"
-
         />
         <div class="w-100">
           <small class="text-danger" v-if="errors.email" id="validateEmail"
-            >Bắt buộc điền email đúng định dạng</small>
+            >Bắt buộc điền email đúng định dạng</small
+          >
         </div>
       </div>
       <div class="form-group">
@@ -60,19 +61,28 @@
           v-model:value="password"
           allow-clear
           id="passwordInput"
-
         />
         <div class="w-100">
-          <small class="text-danger" v-if="errors.password" id="validatePassword"
-            >Bắt buộc điền mật khẩu tối đa 255 ký tự</small>
+          <small
+            class="text-danger"
+            v-if="errors.password"
+            id="validatePassword"
+            >Bắt buộc điền mật khẩu tối đa 255 ký tự</small
+          >
         </div>
       </div>
-      <span v-if="authenticated" class="error-message" id="validateRegister">
+      <span
+        v-if="errors.authenticated"
+        class="error-message"
+        id="validateRegister"
+      >
         Email đã được đăng ký trước đó !</span
       >
       <button type="submit" class="btn-login" id="registerBtn">Register</button>
     </form>
-    <button class="btn-register login-container" id="loginBtn" @click="login()">Login</button>
+    <button class="btn-register login-container" id="loginBtn" @click="login()">
+      Login
+    </button>
   </div>
 </template>
   
@@ -91,7 +101,6 @@ import {
 export default defineComponent({
   setup() {
     const isEmailValid = ref(true); // Initially assume email is valid
-    const authenticated = ref(false);
     const router = useRouter();
     const user = reactive({
       email: "",
@@ -104,7 +113,9 @@ export default defineComponent({
       phone: false,
       email: false,
       password: false,
+      authenticated: false,
     });
+    
     const checkValidate = () => {
       errors.phone = !validatePhoneNumber(user.phone);
       errors.email = !validateEmail(user.email);
@@ -116,10 +127,12 @@ export default defineComponent({
         errors.name == false &&
         errors.phone == false &&
         errors.email == false &&
+        errors.authenticated == false &&
         errors.password == false
       ) {
         return true;
       }
+      return false;
     };
 
     const validateEmail = (email) => {
@@ -129,15 +142,16 @@ export default defineComponent({
     };
 
     const register = () => {
-      if (checkValidate() == true ) {
-      
+      checkValidate();
+      if (checkValidate() == true) {
         axios
           .post("http://localhost/TMDT/admin/apiSigup.php/", user)
           .then((response) => {
-            // console.log(response.data);
+            console.log(response.data);
             if (response.data == "Email already exists") {
-              authenticated.value = true;
-            } else if (response.data == "Register Fail !") {
+              errors.authenticated = true;
+            }
+            else if (response.data == "Register Fail !") {
               // console.log("Thất bại !");
               message.error("Đăng ký thất bại !");
             } else {
@@ -158,11 +172,10 @@ export default defineComponent({
 
     return {
       isEmailValid,
-      authenticated,
       ...toRefs(user),
       login,
       register,
-      errors
+      errors,
     };
   },
 });
