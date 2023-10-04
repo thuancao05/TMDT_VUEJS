@@ -10,13 +10,13 @@
       <span> <DashboardOutlined /> Trang chủ </span>
       <!-- </router-link> -->
     </a-menu-item>
-    <a-menu-item key="admin-products">
+    <a-menu-item key="admin-products" id="productButton">
       <router-link :to="{ name: 'admin-products' }" class="text-router">
         <span> <TagOutlined /> Sản phẩm </span>
       </router-link>
     </a-menu-item>
-    <a-menu-item key="admin-orders">
-      <router-link :to="{ name: 'admin-orders' }" class="text-router">
+    <a-menu-item key="admin-orders" id="orderButton">
+      <router-link :to="{ name: 'admin-orders' }" class="text-router" >
         <span> <UnorderedListOutlined /> Đơn hàng </span>
       </router-link>
     </a-menu-item>
@@ -45,7 +45,7 @@
       <span> <KeyOutlined /> Đổi mật khẩu </span>
       <!-- </router-link> -->
     </a-menu-item>
-    <a-menu-item key="admin-logout" @click="logout()">
+    <a-menu-item key="admin-logout" @click="logout()" id="logoutButton">
       <span> <LogoutOutlined /> Đăng xuất </span>
     </a-menu-item>
 

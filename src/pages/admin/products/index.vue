@@ -3,7 +3,7 @@
     <div class="row mb-3">
       <div class="col-12 d-flex justify-content-end">
         <router-link :to="{ name: 'admin-products-create' }">
-          <a-button type="primary">
+          <a-button type="primary" id="addProductButton">
             <router-link :to="{ name: 'admin-products-create' }">
               <i class="fa-solid fa-plus"></i>
             </router-link>

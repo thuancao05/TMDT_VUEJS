@@ -20,6 +20,7 @@
           height="60"
           width="60"
           class="mx-3 me-3"
+          id="logo"
         />
         <span class="d-none d-sm-flex">QUẢN TRỊ</span>
       </div>

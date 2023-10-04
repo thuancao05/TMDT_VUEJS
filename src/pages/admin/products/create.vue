@@ -45,11 +45,12 @@
                 :class="{
                   'input-danger': errors.name,
                 }"
+                id="nameInput"
               />
 
               <br />
               <div class="w-100">
-                <small class="text-danger" v-if="errors.name"
+                <small class="text-danger" v-if="errors.name" id="errorNameMessage"
                   >Bắt buộc điền tên sản phẩm có độ dài tối đa 255 ký tự</small
                 >
               </div>
@@ -77,6 +78,7 @@
                 :class="{
                   'input-danger': errors.describe,
                 }"
+                id="describeInput"
               />
               <br />
               <div class="w-100">
@@ -108,11 +110,12 @@
                 "
                 :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                 required
+                id="priceInput"
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.price"
-                  >Bắt buộc nhập giá</small
+                <small class="text-danger" v-if="errors.price" id="errorDescribeMessage"
+                  >Bắt buộc nhập giá</small 
                 >
               </div>
             </div>
@@ -144,9 +147,10 @@
                 :class="{
                   'input-danger': errors.category,
                 }"
+                id="categoryInput"
               ></a-select>
               <div class="w-100">
-                <small class="text-danger" v-if="errors.category"
+                <small class="text-danger" v-if="errors.category" id="errerCategoryMessage"
                   >Bắt buộc chọn danh mục</small
                 >
               </div>
@@ -175,10 +179,11 @@
                     ` ${quantity}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 "
                 :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                id="quantityInput"
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.quantity"
+                <small class="text-danger" v-if="errors.quantity" id="quantityInput"
                   >Bắt buộc nhập số lượng</small
                 >
               </div>
@@ -201,9 +206,10 @@
               <a-date-picker
                 v-model:value="date_of_manufacture"
                 :format="dateFormat"
+                id="dateInput"
               />
               <div class="w-100">
-                <small class="text-danger" v-if="errors.date_of_manufacture">{{
+                <small class="text-danger" v-if="errors.date_of_manufacture" id="errorDateMessage">{{
                   errors.price[0]
                 }}</small>
               </div>
@@ -219,8 +225,8 @@
               <span>Hủy</span>
             </a-button>
           </router-link>
-          <a-button type="primary" html-type="submit">
-            <span>Lưu</span>
+          <a-button type="primary" html-type="submit" id="submitButton">
+            <span>Thêm sản phẩm mới</span>
           </a-button>
         </div>
       </div>
