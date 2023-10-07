@@ -21,6 +21,14 @@
               </div>
             </div>
           </div>
+          <div class="w-100">
+            <small
+              class="text-danger"
+              v-if="errors.image"
+              id="errorImageMessage"
+              >Bắt buộc tải lên ảnh</small
+            >
+          </div>
         </div>
         <div class="col-12 col-sm-8">
           <div class="row mb-3">
@@ -50,7 +58,10 @@
 
               <br />
               <div class="w-100">
-                <small class="text-danger" v-if="errors.name" id="errorNameMessage"
+                <small
+                  class="text-danger"
+                  v-if="errors.name"
+                  id="errorNameMessage"
                   >Bắt buộc điền tên sản phẩm có độ dài tối đa 255 ký tự</small
                 >
               </div>
@@ -114,8 +125,11 @@
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.price" id="errorDescribeMessage"
-                  >Bắt buộc nhập giá</small 
+                <small
+                  class="text-danger"
+                  v-if="errors.price"
+                  id="errorPriceMessage"
+                  >Bắt buộc nhập giá</small
                 >
               </div>
             </div>
@@ -150,7 +164,10 @@
                 id="categoryInput"
               ></a-select>
               <div class="w-100">
-                <small class="text-danger" v-if="errors.category" id="errerCategoryMessage"
+                <small
+                  class="text-danger"
+                  v-if="errors.category"
+                  id="errorCategoryMessage"
                   >Bắt buộc chọn danh mục</small
                 >
               </div>
@@ -173,7 +190,6 @@
             <div class="col-12 col-sm-7">
               <a-input-number
                 v-model:value="quantity"
-                required
                 :formatter="
                   (value) =>
                     ` ${quantity}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -183,7 +199,10 @@
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.quantity" id="quantityInput"
+                <small
+                  class="text-danger"
+                  v-if="errors.quantity"
+                  id="errorQuantityMessage"
                   >Bắt buộc nhập số lượng</small
                 >
               </div>
@@ -209,11 +228,15 @@
                 id="dateInput"
               />
               <div class="w-100">
-                <small class="text-danger" v-if="errors.date_of_manufacture" id="errorDateMessage">{{
-                  errors.price[0]
-                }}</small>
+                <small
+                  class="text-danger"
+                  v-if="errors.date"
+                  id="errorDateMessage"
+                  >Bắt buộc nhập ngày sản xuất hợp lệ</small
+                >
               </div>
             </div>
+            
           </div>
         </div>
       </div>
@@ -252,6 +275,7 @@ export default defineComponent({
     useMenu().onSelectedKeys(["admin-products"]);
 
     const dateFormat = "YYYY/MM/DD";
+    const toDate = new dayjs();
     const router = useRouter();
     const category = ref([]);
     const selectedFile = ref(null);
@@ -271,6 +295,8 @@ export default defineComponent({
       price: false,
       describe: false,
       quantity: false,
+      date: false,
+      image: false,
     });
 
     const getProductsCreate = () => {
@@ -319,12 +345,16 @@ export default defineComponent({
         !validateMaxLength(products.name, 255);
       errors.price = !validateNotEmpty(products.price);
       errors.quantity = !validateNotEmpty(products.quantity);
+      errors.image = !validateNotEmpty(products.name);
+      errors.date = dayjs(products.date_of_manufacture, dateFormat).isAfter(dayjs(toDate, dateFormat));
 
       if (
         errors.category == false &&
         errors.name == false &&
         errors.price == false &&
-        errors.quantity == false
+        errors.quantity == false &&
+        errors.date == false &&
+        errors.image == false
       ) {
         return true;
       }
