@@ -7,9 +7,9 @@
             <div class="col-12 d-flex justify-content-center mb-3">
               <div>
                 <h4>Tải lên hình ảnh</h4>
-                <input type="file" @change="handleFileUpload" ref="fileInput" />
+                <input type="file" @change="handleFileUpload" ref="fileInput" id="chooseImageButton"/>
                 <br />
-                <button @click="uploadImage" class="mt-2 upload">Upload</button>
+                <button @click="uploadImage" class="mt-2 upload" id="uploadImageButton">Upload</button>
                 <br />
                 <!-- Display the uploaded image -->
                 <img
@@ -330,11 +330,11 @@ export default defineComponent({
           // console.log(response.data);
           imageUrl.value = response.data.data.url; // Set the uploaded image URL
           products.thumbUrl = response.data.data.url;
-          alert("Thêm hình ảnh thành công!");
+          message.success("Thêm hình ảnh thành công")
         })
         .catch((error) => {
           console.error(error);
-          alert("Thêm hình ảnh thất bại.");
+          message.error("Thêm hình ảnh thất bại")
         });
     };
 

@@ -10,7 +10,7 @@
                 <h4>Tải lên hình ảnh</h4>
                 <input type="file" @change="handleFileUpload" ref="fileInput" />
                 <br />
-                <button @click="uploadImage" class="mt-2" upload>Upload</button>
+                <button @click="uploadImage" class="mt-2 upload" upload>Upload</button>
                 <br />
                 <!-- Display the uploaded image -->
                 <img
@@ -47,11 +47,18 @@
                 :class="{
                   'input-danger': errors.name,
                 }"
+                id="nameInput"
+
               />
 
               <br />
               <div class="w-100">
-                <small class="text-danger" v-if="errors.name">Bắt buộc điền tên sản phẩm có độ dài tối đa 255 ký tự</small>
+                <small
+                  class="text-danger"
+                  v-if="errors.name"
+                  id="errorNameMessage"
+                  >Bắt buộc điền tên sản phẩm có độ dài tối đa 255 ký tự</small
+                >
               </div>
             </div>
           </div>
@@ -104,10 +111,17 @@
                   (value) => ` ${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 "
                 :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                id="priceInput"
+
               />
 
               <div class="w-100">
-                <small class="text-danger" v-if="errors.price">Bắt buộc nhập giá</small>
+                <small
+                  class="text-danger"
+                  v-if="errors.price"
+                  id="errorPriceMessage"
+                  >Bắt buộc nhập giá</small
+                >
               </div>
             </div>
           </div>
@@ -207,7 +221,7 @@
               <span>Hủy</span>
             </a-button>
           </router-link>
-          <a-button type="primary" html-type="submit">
+          <a-button type="primary" html-type="submit" id="submitButton">
             <span>Lưu</span>
           </a-button>
         </div>
