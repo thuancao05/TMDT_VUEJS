@@ -120,7 +120,6 @@
                   (value) => ` ${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 "
                 :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                required
                 id="priceInput"
               />
 
@@ -157,7 +156,6 @@
                 :filter-option="filterOption"
                 allow-clear
                 v-model:value="category_id"
-                required
                 :class="{
                   'input-danger': errors.category,
                 }"

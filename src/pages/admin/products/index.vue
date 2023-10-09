@@ -54,6 +54,7 @@
               <a-button
                 type="danger"
                 @click="destroy(record.sp_id, record.sp_ten)"
+                id="deleteProductButton"
               >
                 <i class="fa-solid fa-trash"></i>
               </a-button>

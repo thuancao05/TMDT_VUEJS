@@ -8,9 +8,9 @@
               <div id="image"></div>
               <div>
                 <h4>Tải lên hình ảnh</h4>
-                <input type="file" @change="handleFileUpload" ref="fileInput" />
+                <input type="file" @change="handleFileUpload" ref="fileInput" id="chooseImageButton"/>
                 <br />
-                <button @click="uploadImage" class="mt-2 upload" upload>Upload</button>
+                <button @click="uploadImage" class="mt-2 upload" id="uploadImageButton">Upload</button>
                 <br />
                 <!-- Display the uploaded image -->
                 <img
@@ -81,6 +81,7 @@
                 allow-clear
                 v-model:value="describe"
                 :rows="13"
+                id="describeInput"
               />
               <br />
               <div class="w-100">
@@ -151,6 +152,7 @@
                 :class="{
                   'input-danger': errors.category,
                 }"
+                id="categoryInput"
               ></a-select>
               <div class="w-100">
                 <small class="text-danger" v-if="errors.category">Bắt buộc chọn danh mục</small>
@@ -179,6 +181,8 @@
                     ` ${quantity}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 "
                 :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                id="quantityInput"
+
               />
 
               <div class="w-100">
@@ -203,6 +207,8 @@
               <a-date-picker
                 v-model:value="date_of_manufacture"
                 :format="dateFormat"
+                id="dateInput"
+
               />
               <div class="w-100">
                 <small class="text-danger" v-if="errors.date_of_manufacture">{{
@@ -357,11 +363,11 @@ export default defineComponent({
           // console.log(response.data);
           imageUrl.value = response.data.data.url; // Set the uploaded image URL
           products.thumbUrl = response.data.data.url;
-          alert("Thêm hình ảnh thành công!");
+          message.success("Thêm hình ảnh thành công")
         })
         .catch((error) => {
           console.error(error);
-          alert("Thêm hình ảnh thất bại.");
+          message.error("Thêm hình ảnh thất bại")
         });
     };
     getProductsEdit();
