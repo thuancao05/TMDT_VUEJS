@@ -31,9 +31,9 @@
       <!-- </router-link> -->
     </a-menu-item>
     <a-menu-item key="admin-customer">
-      <!-- <router-link :to="{name: 'admin-users'}"> -->
+      <router-link :to="{name: 'admin-customers'}" class="text-router">
       <span> <UsergroupAddOutlined /> Khách hàng </span>
-      <!-- </router-link> -->
+      </router-link>
     </a-menu-item>
     <a-menu-item key="admin-staff">
       <!-- <router-link :to="{name: 'admin-users'}"> -->

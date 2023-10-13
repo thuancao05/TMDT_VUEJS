@@ -26,13 +26,22 @@ const admin = [
         component: () => import("../pages/admin/orders/index.vue"),
       },
       {
-      path: "orders/:id/edit",
-      name: "admin-order-edit",
-      component: () => import("../pages/admin/orders/edit.vue"),
+        path: "orders/:id/edit",
+        name: "admin-order-edit",
+        component: () => import("../pages/admin/orders/edit.vue"),
       },
-
+      // Quan ly khach hang
+      {
+        path: "customers",
+        name: "admin-customers",
+        component: () => import("../pages/admin/customers/index.vue"),
+      },
+      {
+        path: "customers/:id/edit",
+        name: "admin-customer-edit",
+        component: () => import("../pages/admin/customers/edit.vue"),
+      },
     ],
-
   },
 ];
 export default admin;
