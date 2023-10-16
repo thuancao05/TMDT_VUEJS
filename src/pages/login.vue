@@ -64,8 +64,8 @@ export default defineComponent({
     const authenticated = ref(false);
     const router = useRouter();
     const user = reactive({
-      email: "thuan@gmail.com",
-      password: "thuan123",
+      email: "",
+      password: "",
     });
     const errors = reactive({
       email: false,
