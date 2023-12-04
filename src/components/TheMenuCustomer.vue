@@ -25,7 +25,7 @@
       </router-link>
     </a-menu-item>
 
-    <a-menu-item key="customer-logout" @click="logout()">
+    <a-menu-item key="customer-logout" @click="logout()" id="logoutBtn">
       <span> <LogoutOutlined /> Đăng xuất </span>
     </a-menu-item>
 

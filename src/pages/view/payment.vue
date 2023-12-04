@@ -220,7 +220,6 @@
               html-type="submit"
               style="margin-left: 30px"
               id="submitButton"
-
             >
               <span>Đặt hàng </span>
             </a-button>
@@ -435,7 +434,8 @@ export default defineComponent({
           .then(function (response) {
             // console.log(response);
             message.success("Đặt hàng thành công");
-            router.push({ name: "customer-products" });
+            router.push({ name: "customer-orders" });
+            // console.log("dat hang")
           })
           .catch((error) => {
             console.error(error);
@@ -464,6 +464,8 @@ export default defineComponent({
         errors.note == false
       ) {
         return true;
+      }else{
+        return false;
       }
     };
     getCity();
